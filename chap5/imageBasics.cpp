@@ -17,8 +17,16 @@ int main(int argc, char **argv)
         return 0;
     }
 
+    // List Image's Infomation
     cout << "Image width:" << image.cols << endl;
-    cout << "Image height" << image.rows << endl;
+    cout << "Image height:" << image.rows << endl;
+    cout << "Image channels:" << image.channels() << endl;
+    cout << "Image type:" << image.type() << endl;
+    
+    // Display Image
+    cv::imshow("Ubuntu", image);
+    cv::waitKey(0);
 
+    
     return 0;
 }

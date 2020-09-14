@@ -1,0 +1,21 @@
+Start testing: Sep 13 17:19 CST
+----------------------------------------------------------
+1/1 Testing: test
+1/1 Test: test
+Command: "/home/weihuang/slambook/chap0/CMAKE_Tutorial/build/cmake_test"
+Directory: /home/weihuang/slambook/chap0/CMAKE_Tutorial/build
+"test" start time: Sep 13 17:19 CST
+Output:
+----------------------------------------------------------
+Hi, this repotory is used to test CMAKE.
+Use ADD_DEFINITIONS in CMAKE to set define.
+Input number: 0
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test" end time: Sep 13 17:19 CST
+"test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Sep 13 17:19 CST
