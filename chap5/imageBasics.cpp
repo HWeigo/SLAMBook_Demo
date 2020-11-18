@@ -11,11 +11,11 @@ int main(int argc, char **argv)
     cv::Mat image;
     image = cv::imread(argv[1]);
 
-    if(image.data == nullptr)
-    {
-        cerr << "File " << argv[1] << " is empty." << endl;
-        return 0;
-    }
+    // if(image.data == nullptr)
+    // {
+    //     cerr << "File " << argv[1] << " is empty." << endl;
+    //     return 0;
+    // }
 
     // List Image's Infomation
     cout << "Image width:" << image.cols << endl;
@@ -24,6 +24,7 @@ int main(int argc, char **argv)
     cout << "Image type:" << image.type() << endl;
     
     // Display Image
+    cv::namedWindow("Display");
     cv::imshow("Ubuntu", image);
     cv::waitKey(0);
 

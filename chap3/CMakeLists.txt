@@ -1,11 +1,4 @@
-# <---CMake tutorial--->
-
-# <- File Mangement ->
-# src: source code
-# ext: third-party package and header file
-
-# Define minimum version of CMake
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.10)
 
 # Set the project name
 project(eigen_test)
