@@ -56,17 +56,6 @@ CMAKE_BINARY_DIR = "/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/S
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
-
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
-
-.PHONY : rebuild_cache/fast
-
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
@@ -77,6 +66,17 @@ edit_cache:
 edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
+
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
+
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
+
+.PHONY : rebuild_cache/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -123,6 +123,19 @@ orb_cv/fast:
 	$(MAKE) -f CMakeFiles/orb_cv.dir/build.make CMakeFiles/orb_cv.dir/build
 .PHONY : orb_cv/fast
 
+#=============================================================================
+# Target rules for targets named pnp
+
+# Build rule for target.
+pnp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 pnp
+.PHONY : pnp
+
+# fast build rule for target.
+pnp/fast:
+	$(MAKE) -f CMakeFiles/pnp.dir/build.make CMakeFiles/pnp.dir/build
+.PHONY : pnp/fast
+
 orb_cv.o: orb_cv.cpp.o
 
 .PHONY : orb_cv.o
@@ -150,18 +163,49 @@ orb_cv.cpp.s:
 	$(MAKE) -f CMakeFiles/orb_cv.dir/build.make CMakeFiles/orb_cv.dir/orb_cv.cpp.s
 .PHONY : orb_cv.cpp.s
 
+pnp.o: pnp.cpp.o
+
+.PHONY : pnp.o
+
+# target to build an object file
+pnp.cpp.o:
+	$(MAKE) -f CMakeFiles/pnp.dir/build.make CMakeFiles/pnp.dir/pnp.cpp.o
+.PHONY : pnp.cpp.o
+
+pnp.i: pnp.cpp.i
+
+.PHONY : pnp.i
+
+# target to preprocess a source file
+pnp.cpp.i:
+	$(MAKE) -f CMakeFiles/pnp.dir/build.make CMakeFiles/pnp.dir/pnp.cpp.i
+.PHONY : pnp.cpp.i
+
+pnp.s: pnp.cpp.s
+
+.PHONY : pnp.s
+
+# target to generate assembly for a file
+pnp.cpp.s:
+	$(MAKE) -f CMakeFiles/pnp.dir/build.make CMakeFiles/pnp.dir/pnp.cpp.s
+.PHONY : pnp.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... rebuild_cache"
-	@echo "... orb_cv"
 	@echo "... edit_cache"
+	@echo "... orb_cv"
+	@echo "... rebuild_cache"
+	@echo "... pnp"
 	@echo "... orb_cv.o"
 	@echo "... orb_cv.i"
 	@echo "... orb_cv.s"
+	@echo "... pnp.o"
+	@echo "... pnp.i"
+	@echo "... pnp.s"
 .PHONY : help
 
 

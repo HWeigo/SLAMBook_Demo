@@ -1,0 +1,12 @@
+[
+{
+  "directory": "/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap7n8/build",
+  "command": "/usr/bin/g++-7   -isystem /usr/local/include/opencv4 -I/usr/include/eigen3  -g   -std=gnu++11 -o CMakeFiles/orb_cv.dir/orb_cv.cpp.o -c \"/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap7n8/orb_cv.cpp\"",
+  "file": "/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap7n8/orb_cv.cpp"
+},
+{
+  "directory": "/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap7n8/build",
+  "command": "/usr/bin/g++-7   -isystem /usr/local/include/opencv4 -I/usr/include/eigen3  -g   -std=gnu++11 -o CMakeFiles/pnp.dir/pnp.cpp.o -c \"/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap7n8/pnp.cpp\"",
+  "file": "/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap7n8/pnp.cpp"
+}
+]
