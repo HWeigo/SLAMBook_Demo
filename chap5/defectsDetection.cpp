@@ -23,18 +23,23 @@ int main (int argc, char **argv) {
     }
     imshow("Original Image: ", imageOri);
 
-    Mat imageBlur, imageEnhanced, imageEdge, imageClosed;
+    Mat imageBlur, imageEnhanced, imageFilter, imageEdge, imageClosed;
     GaussianBlur(imageOri, imageBlur, Size(3,3), 1.0);
     imshow("Blur Image: ", imageBlur);
 
     imageEnhanced = EnhanceContraction(imageBlur);
+    // equalizeHist(imageBlur, imageEnhanced);
     imshow("Enhanced Image: ", imageEnhanced);
 
+    bilateralFilter(imageEnhanced, imageFilter, 9, 75, 75);
+    imshow("Filter Image: ", imageFilter);
+
+
     // Implement Canny edge detection
-    Canny(imageEnhanced, imageEdge, 15, 40);
+    Canny(imageBlur, imageEdge, 20, 50);
     imshow("Canny Detection", imageEdge);
 
-
+    
 	Mat kernel = getStructuringElement(MORPH_RECT, Size(5,5), Point(-1, -1));
     morphologyEx(imageEdge, imageClosed, MORPH_CLOSE, kernel);
     imshow("Closed image: ",imageClosed);
@@ -59,20 +64,29 @@ Mat EnhanceContraction(Mat & srcImg) {
         uchar *data = srcImg.ptr<uchar>(v);
         uchar *out = outImg.ptr<uchar>(v);
         for (int u=0; u<srcImg.cols; u++) {
-            out[u] =saturate_cast<uchar>(log(data[u]+1-100)/log(*maxPtr + 1)*255);
+            out[u] =saturate_cast<uchar>(log(data[u]+1)/log(*maxPtr + 1)*255);
             // out[u] = saturate_cast<uchar>((data[u]-*minPtr)/(*maxPtr - *minPtr)*255);
             // out[u] = saturate_cast<uchar>(pow(data[u]/255.0,0.7)*255);
         }
     }
-    // for (int v=0; v<srcImg.rows; v++){
-    //     uchar *out = outImg.ptr<uchar>(v);
-    //     for (int u=0; u<srcImg.cols; u++) {
-    //         out[u] =saturate_cast<uchar>(log(out[u]+1)/log(*maxPtr + 1)*255);
-    //         // out[u] = saturate_cast<uchar>((data[u]-*minPtr)/(*maxPtr - *minPtr)*255);
-    //         // out[u] = saturate_cast<uchar>(pow(data[u]/255.0,3)*255);
-    //     }
-    // }
-
+    minMaxIdx(outImg, minPtr, maxPtr);
+    for (int v=0; v<srcImg.rows; v++){
+        uchar *out = outImg.ptr<uchar>(v);
+        for (int u=0; u<srcImg.cols; u++) {
+            // out[u] =saturate_cast<uchar>(log(out[u]+1)/log(*maxPtr + 1)*255);
+            // out[u] = saturate_cast<uchar>((out[u]-*minPtr)/(*maxPtr - *minPtr)*255);
+            out[u] = saturate_cast<uchar>(pow(out[u]/255.0,1.7)*255);
+        }
+    }
+    minMaxIdx(outImg, minPtr, maxPtr);
+    for (int v=0; v<srcImg.rows; v++){
+        uchar *out = outImg.ptr<uchar>(v);
+        for (int u=0; u<srcImg.cols; u++) {
+            // out[u] =saturate_cast<uchar>(log(out[u]+1)/log(*maxPtr + 1)*255);
+            out[u] = saturate_cast<uchar>((out[u]-*minPtr)/(*maxPtr - *minPtr)*255);
+            // out[u] = saturate_cast<uchar>(pow(out[u]/255.0,1.7)*255);
+        }
+    }
     minMaxIdx(outImg, minPtr, maxPtr);
     cout << "Min vlaue: " << *minPtr << endl;
     cout << "Max vlaue: " << *maxPtr << endl;
