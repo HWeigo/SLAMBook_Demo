@@ -1,4 +1,9 @@
 {
     "powermode.enabled": true,
-    "powermode.enableShake": false, 
+    "powermode.enableShake": false,
+    "files.associations": {
+        "ostream": "cpp",
+        "cmath": "cpp"
+    },
+    
 }

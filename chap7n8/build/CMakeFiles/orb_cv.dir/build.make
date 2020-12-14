@@ -60,15 +60,15 @@ include CMakeFiles/orb_cv.dir/flags.make
 CMakeFiles/orb_cv.dir/orb_cv.cpp.o: CMakeFiles/orb_cv.dir/flags.make
 CMakeFiles/orb_cv.dir/orb_cv.cpp.o: ../orb_cv.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap7n8/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/orb_cv.dir/orb_cv.cpp.o"
-	/usr/bin/g++-7  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/orb_cv.dir/orb_cv.cpp.o -c "/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap7n8/orb_cv.cpp"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/orb_cv.dir/orb_cv.cpp.o -c "/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap7n8/orb_cv.cpp"
 
 CMakeFiles/orb_cv.dir/orb_cv.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/orb_cv.dir/orb_cv.cpp.i"
-	/usr/bin/g++-7 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap7n8/orb_cv.cpp" > CMakeFiles/orb_cv.dir/orb_cv.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap7n8/orb_cv.cpp" > CMakeFiles/orb_cv.dir/orb_cv.cpp.i
 
 CMakeFiles/orb_cv.dir/orb_cv.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/orb_cv.dir/orb_cv.cpp.s"
-	/usr/bin/g++-7 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap7n8/orb_cv.cpp" -o CMakeFiles/orb_cv.dir/orb_cv.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap7n8/orb_cv.cpp" -o CMakeFiles/orb_cv.dir/orb_cv.cpp.s
 
 CMakeFiles/orb_cv.dir/orb_cv.cpp.o.requires:
 

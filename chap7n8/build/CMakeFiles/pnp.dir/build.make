@@ -60,15 +60,15 @@ include CMakeFiles/pnp.dir/flags.make
 CMakeFiles/pnp.dir/pnp.cpp.o: CMakeFiles/pnp.dir/flags.make
 CMakeFiles/pnp.dir/pnp.cpp.o: ../pnp.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap7n8/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/pnp.dir/pnp.cpp.o"
-	/usr/bin/g++-7  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/pnp.dir/pnp.cpp.o -c "/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap7n8/pnp.cpp"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/pnp.dir/pnp.cpp.o -c "/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap7n8/pnp.cpp"
 
 CMakeFiles/pnp.dir/pnp.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/pnp.dir/pnp.cpp.i"
-	/usr/bin/g++-7 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap7n8/pnp.cpp" > CMakeFiles/pnp.dir/pnp.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap7n8/pnp.cpp" > CMakeFiles/pnp.dir/pnp.cpp.i
 
 CMakeFiles/pnp.dir/pnp.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/pnp.dir/pnp.cpp.s"
-	/usr/bin/g++-7 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap7n8/pnp.cpp" -o CMakeFiles/pnp.dir/pnp.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap7n8/pnp.cpp" -o CMakeFiles/pnp.dir/pnp.cpp.s
 
 CMakeFiles/pnp.dir/pnp.cpp.o.requires:
 
