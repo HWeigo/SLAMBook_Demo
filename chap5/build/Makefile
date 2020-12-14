@@ -67,6 +67,17 @@ rebuild_cache/fast: rebuild_cache
 
 .PHONY : rebuild_cache/fast
 
+# Special rule for the target test
+test:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
+	/usr/bin/ctest --force-new-ctest-process $(ARGS)
+.PHONY : test
+
+# Special rule for the target test
+test/fast: test
+
+.PHONY : test/fast
+
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
@@ -123,20 +134,72 @@ imageBasics/fast:
 	$(MAKE) -f CMakeFiles/imageBasics.dir/build.make CMakeFiles/imageBasics.dir/build
 .PHONY : imageBasics/fast
 
+#=============================================================================
+# Target rules for targets named defectsDetection
+
+# Build rule for target.
+defectsDetection: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 defectsDetection
+.PHONY : defectsDetection
+
+# fast build rule for target.
+defectsDetection/fast:
+	$(MAKE) -f CMakeFiles/defectsDetection.dir/build.make CMakeFiles/defectsDetection.dir/build
+.PHONY : defectsDetection/fast
+
+defectsDetection.o: defectsDetection.cpp.o
+
+.PHONY : defectsDetection.o
+
 # target to build an object file
-imageBasics.o:
-	$(MAKE) -f CMakeFiles/imageBasics.dir/build.make CMakeFiles/imageBasics.dir/imageBasics.o
-.PHONY : imageBasics.o
+defectsDetection.cpp.o:
+	$(MAKE) -f CMakeFiles/defectsDetection.dir/build.make CMakeFiles/defectsDetection.dir/defectsDetection.cpp.o
+.PHONY : defectsDetection.cpp.o
+
+defectsDetection.i: defectsDetection.cpp.i
+
+.PHONY : defectsDetection.i
 
 # target to preprocess a source file
-imageBasics.i:
-	$(MAKE) -f CMakeFiles/imageBasics.dir/build.make CMakeFiles/imageBasics.dir/imageBasics.i
-.PHONY : imageBasics.i
+defectsDetection.cpp.i:
+	$(MAKE) -f CMakeFiles/defectsDetection.dir/build.make CMakeFiles/defectsDetection.dir/defectsDetection.cpp.i
+.PHONY : defectsDetection.cpp.i
+
+defectsDetection.s: defectsDetection.cpp.s
+
+.PHONY : defectsDetection.s
 
 # target to generate assembly for a file
-imageBasics.s:
-	$(MAKE) -f CMakeFiles/imageBasics.dir/build.make CMakeFiles/imageBasics.dir/imageBasics.s
+defectsDetection.cpp.s:
+	$(MAKE) -f CMakeFiles/defectsDetection.dir/build.make CMakeFiles/defectsDetection.dir/defectsDetection.cpp.s
+.PHONY : defectsDetection.cpp.s
+
+imageBasics.o: imageBasics.cpp.o
+
+.PHONY : imageBasics.o
+
+# target to build an object file
+imageBasics.cpp.o:
+	$(MAKE) -f CMakeFiles/imageBasics.dir/build.make CMakeFiles/imageBasics.dir/imageBasics.cpp.o
+.PHONY : imageBasics.cpp.o
+
+imageBasics.i: imageBasics.cpp.i
+
+.PHONY : imageBasics.i
+
+# target to preprocess a source file
+imageBasics.cpp.i:
+	$(MAKE) -f CMakeFiles/imageBasics.dir/build.make CMakeFiles/imageBasics.dir/imageBasics.cpp.i
+.PHONY : imageBasics.cpp.i
+
+imageBasics.s: imageBasics.cpp.s
+
 .PHONY : imageBasics.s
+
+# target to generate assembly for a file
+imageBasics.cpp.s:
+	$(MAKE) -f CMakeFiles/imageBasics.dir/build.make CMakeFiles/imageBasics.dir/imageBasics.cpp.s
+.PHONY : imageBasics.cpp.s
 
 # Help Target
 help:
@@ -145,8 +208,13 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
-	@echo "... imageBasics"
+	@echo "... test"
 	@echo "... edit_cache"
+	@echo "... imageBasics"
+	@echo "... defectsDetection"
+	@echo "... defectsDetection.o"
+	@echo "... defectsDetection.i"
+	@echo "... defectsDetection.s"
 	@echo "... imageBasics.o"
 	@echo "... imageBasics.i"
 	@echo "... imageBasics.s"

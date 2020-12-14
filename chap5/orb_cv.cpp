@@ -18,21 +18,21 @@ int main(int argc, char **argv) {
     // Step 1: Detect the keypoint using ORB detector
     vector<cv::KeyPoint> keypoint1, keypoint2;
     cv::Mat descriptors_1, descriptors_2;
-    cv::Ptr<cv::FeatureDetector> detector = cv::ORB::create;
-    cv::Ptr<cv::DescriptorExtractor> descirptor = cv::ORB::create;
+    // cv::Ptr<cv::FeatureDetector> detector = cv::ORB::create;
+    // cv::Ptr<cv::DescriptorExtractor> descirptor = cv::ORB::create;
 
-    detector->detectAndCompute(inImg1, cv::noArray(), keypoint1, descriptors_1);
-    detector->detectAndCompute(inImg2, cv::noArray(), keypoint2, descriptors_2);
+    // detector->detectAndCompute(inImg1, cv::noArray(), keypoint1, descriptors_1);
+    // detector->detectAndCompute(inImg2, cv::noArray(), keypoint2, descriptors_2);
 
-    // Step 2: Match keypoints
-    cv::Ptr<cv::DescriptorMatcher> matcher = cv::DescriptorMatcher::create( "ORB" );
+    // // Step 2: Match keypoints
+    // cv::Ptr<cv::DescriptorMatcher> matcher = cv::DescriptorMatcher::create( "ORB" );
     
-    cv::Mat outImg1, outImg2;
-    cv::drawKeypoints(inImg1, keypoint1, outImg1);
-    cv::drawKeypoints(inImg2, keypoint2, outImg2);
-    cv::imshow(outImg1);
-    cv::imshow(outImg2);
+    // cv::Mat outImg1, outImg2;
+    // cv::drawKeypoints(inImg1, keypoint1, outImg1);
+    // cv::drawKeypoints(inImg2, keypoint2, outImg2);
+    // cv::imshow(outImg1);
+    // cv::imshow(outImg2);
 
-
+    // cv::waitKey(0);
     return EXIT_SUCCESS;
 }
