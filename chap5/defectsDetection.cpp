@@ -163,8 +163,6 @@ void ConnectedComponentLabeling(Mat srcImg) {
             int labelCurr = (int) labelTable.at<uchar>(v,u);
             cout << "Current label: " << labelCurr << endl; 
             labelTable.at<uchar>(v,u) = setList[labelCurr-1].FindRoot(setList);
-            if (labelTable.at<uchar>(v,u) == 1)
-                labelTable.at<uchar>(v,u) = 230;
             cout << "Updated label: " << (int) labelTable.at<uchar>(v,u) << endl; 
         }
     }
