@@ -19,8 +19,8 @@ class Set {
         int parent;
 
         int FindRootHelper(const vector<Set> &setList, int x) {
-            if (setList[x].parent != x)
-                return FindRootHelper(setList, setList[x].parent);
+            if (setList[x-1].parent != x)
+                return FindRootHelper(setList, setList[x-1].parent);
             return x;
         }
 
@@ -31,9 +31,8 @@ class Set {
         }
 
         void Link(const vector<Set> &setList, int target) {
-            Set root = setList[target];
+            Set root = setList[target-1];
             parent = root.FindRoot(setList);
-
         }
 
         int FindRoot(const vector<Set> &setList) {

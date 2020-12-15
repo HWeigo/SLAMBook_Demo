@@ -101,10 +101,11 @@ Mat EnhanceContraction(Mat & srcImg) {
 
 void ConnectedComponentLabeling(Mat srcImg) {
     Mat labelTable = Mat::zeros(srcImg.size(), srcImg.type());
-    int labelCurr = 1;
-    int numW = 0, numB = 0, numT = 0;
+    // Mat labelTable(srcImg.size(),  srcImg.type(), Scalar::all(255));
+    int labelCurr = 0;
     vector<Set> setList;
     
+    // Fisrt loop
     for (int v=0; v<srcImg.rows; v++) {
         for (int u=0; u<srcImg.cols; u++) {
             // If current pixel is black, then continue
@@ -114,46 +115,60 @@ void ConnectedComponentLabeling(Mat srcImg) {
             vector<int> neighboorLabels;
             // West
             if (u != 0 && srcImg.at<uchar>(v,u-1) != 0) {
-                neighboorLabels.emplace_back(labelTable.at<uchar>(v,u-1), minLabel);
+                neighboorLabels.emplace_back(labelTable.at<uchar>(v,u-1));
                 // minLabel = MIN(labelTable.at<uchar>(v,u-1), minLabel);
             }
             // North West
             if (u != 0 && v!=0 && srcImg.at<uchar>(v-1,u-1) != 0) {
-                neighboorLabels.emplace_back(labelTable.at<uchar>(v-1,u-1), minLabel);
+                neighboorLabels.emplace_back(labelTable.at<uchar>(v-1,u-1));
                 // minLabel = MIN(labelTable.at<uchar>(v-1,u-1), minLabel);
             }
             // North 
             if (v!=0 && srcImg.at<uchar>(v-1,u) != 0) {
-                neighboorLabels.emplace_back(labelTable.at<uchar>(v-1,u), minLabel);
+                neighboorLabels.emplace_back(labelTable.at<uchar>(v-1,u));
                 // minLabel = MIN(labelTable.at<uchar>(v-1,u), minLabel);
             }
             // North East
             if (u!=(srcImg.cols-1) && v!=0 && srcImg.at<uchar>(v-1,u+1) != 0) {
-                neighboorLabels.emplace_back(labelTable.at<uchar>(v-1,u+1), minLabel);
+                neighboorLabels.emplace_back(labelTable.at<uchar>(v-1,u+1));
                 // minLabel = MIN(labelTable.at<uchar>(v-1,u+1), minLabel);
             }
 
-            sort(neighboorLabels.begin(), neighboorLabels.end());
-            int minLabel = neighboorLabels[0];
-            Set temp(labelCurr);
-            setList.emplace_back(temp);
-            if (minLabel == 1000) {
+            
+            if (neighboorLabels.empty()) {
                 // Doesn't have neighborhood
                 labelCurr += 1;
                 labelTable.at<uchar>(v,u) = labelCurr;
-            } else
-            {
+                Set temp(labelCurr);
+                setList.emplace_back(temp);
+            } else {
+                sort(neighboorLabels.begin(), neighboorLabels.end());
+                int minLabel = neighboorLabels[0];
                 labelTable.at<uchar>(v,u) = minLabel;
                 for (int l : neighboorLabels) {
-                    temp.Link(setList, l);''
+                    setList[l-1].Link(setList, minLabel);
                 }
             }
         }
     }
 
     imshow("label", labelTable);
-    // cout << numW << " " << numB << endl;
-    // cout << numW+numB << endl;
-    // cout << numT << endl;
-    // cout << srcImg.rows*srcImg.cols << endl;
+
+    cout << setList.size() << endl;
+
+    for (int v=0; v<srcImg.rows; v++) {
+        for (int u=0; u<srcImg.cols; u++) {
+            if (srcImg.at<uchar>(v,u) == 0)
+                continue;
+            int labelCurr = (int) labelTable.at<uchar>(v,u);
+            cout << "Current label: " << labelCurr << endl; 
+            labelTable.at<uchar>(v,u) = setList[labelCurr-1].FindRoot(setList);
+            if (labelTable.at<uchar>(v,u) == 1)
+                labelTable.at<uchar>(v,u) = 230;
+            cout << "Updated label: " << (int) labelTable.at<uchar>(v,u) << endl; 
+        }
+    }
+
+
+    imshow("label_new", labelTable);
 }
