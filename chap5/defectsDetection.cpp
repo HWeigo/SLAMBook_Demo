@@ -103,36 +103,50 @@ void ConnectedComponentLabeling(Mat srcImg) {
     Mat labelTable = Mat::zeros(srcImg.size(), srcImg.type());
     int labelCurr = 1;
     int numW = 0, numB = 0, numT = 0;
+    vector<Set> setList;
+    
     for (int v=0; v<srcImg.rows; v++) {
         for (int u=0; u<srcImg.cols; u++) {
             // If current pixel is black, then continue
             if (srcImg.at<uchar>(v,u) == 0)
                 continue;
 
-            int minLabel = 1000;
+            vector<int> neighboorLabels;
             // West
             if (u != 0 && srcImg.at<uchar>(v,u-1) != 0) {
-                minLabel = MIN(labelTable.at<uchar>(v,u-1), minLabel);
+                neighboorLabels.emplace_back(labelTable.at<uchar>(v,u-1), minLabel);
+                // minLabel = MIN(labelTable.at<uchar>(v,u-1), minLabel);
             }
             // North West
             if (u != 0 && v!=0 && srcImg.at<uchar>(v-1,u-1) != 0) {
-                minLabel = MIN(labelTable.at<uchar>(v-1,u-1), minLabel);
+                neighboorLabels.emplace_back(labelTable.at<uchar>(v-1,u-1), minLabel);
+                // minLabel = MIN(labelTable.at<uchar>(v-1,u-1), minLabel);
             }
             // North 
             if (v!=0 && srcImg.at<uchar>(v-1,u) != 0) {
-                minLabel = MIN(labelTable.at<uchar>(v-1,u), minLabel);
+                neighboorLabels.emplace_back(labelTable.at<uchar>(v-1,u), minLabel);
+                // minLabel = MIN(labelTable.at<uchar>(v-1,u), minLabel);
             }
             // North East
             if (u!=(srcImg.cols-1) && v!=0 && srcImg.at<uchar>(v-1,u+1) != 0) {
-                minLabel = MIN(labelTable.at<uchar>(v-1,u+1), minLabel);
+                neighboorLabels.emplace_back(labelTable.at<uchar>(v-1,u+1), minLabel);
+                // minLabel = MIN(labelTable.at<uchar>(v-1,u+1), minLabel);
             }
 
+            sort(neighboorLabels.begin(), neighboorLabels.end());
+            int minLabel = neighboorLabels[0];
+            Set temp(labelCurr);
+            setList.emplace_back(temp);
             if (minLabel == 1000) {
+                // Doesn't have neighborhood
                 labelCurr += 1;
                 labelTable.at<uchar>(v,u) = labelCurr;
             } else
             {
                 labelTable.at<uchar>(v,u) = minLabel;
+                for (int l : neighboorLabels) {
+                    temp.Link(setList, l);''
+                }
             }
         }
     }

@@ -10,10 +10,38 @@
 using namespace std;
 using namespace cv;
 
-// #define MAX(a,b)            (((a) > (b)) ? (a) : (b))
-// #define MIN(a,b)            (((a) < (b)) ? (a) : (b))
-
 Mat EnhanceContraction(Mat & srcImg);
 void ConnectedComponentLabeling(Mat srcImg);
+
+class Set {
+    private:
+        int label;
+        int parent;
+
+        int FindRootHelper(const vector<Set> &setList, int x) {
+            if (setList[x].parent != x)
+                return FindRootHelper(setList, setList[x].parent);
+            return x;
+        }
+
+    public:
+        Set(int x) {
+            parent = x;
+            label = x;
+        }
+
+        void Link(const vector<Set> &setList, int target) {
+            Set root = setList[target];
+            parent = root.FindRoot(setList);
+
+        }
+
+        int FindRoot(const vector<Set> &setList) {
+            if (parent !=  label) 
+                return FindRootHelper(setList, parent);
+            return parent;
+        }
+
+};
 
 #endif
