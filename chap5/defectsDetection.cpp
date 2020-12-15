@@ -1,12 +1,4 @@
-#include <iostream>
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-
-using namespace std;
-using namespace cv;
-
-Mat EnhanceContraction(Mat & srcImg) ;
+#include "defectsDetection.h"
 
 int main (int argc, char **argv) {
 
@@ -43,7 +35,12 @@ int main (int argc, char **argv) {
 	Mat kernel = getStructuringElement(MORPH_RECT, Size(5,5), Point(-1, -1));
     morphologyEx(imageEdge, imageClosed, MORPH_CLOSE, kernel);
     imshow("Closed image: ",imageClosed);
-    // // imwrite("Blur.jpg", imageBlur);
+
+    ConnectedComponentLabeling(imageEdge);
+
+    // imwrite("Blur.jpg", imageBlur);
+
+
 
     waitKey(0);
     return EXIT_SUCCESS;
@@ -100,4 +97,26 @@ Mat EnhanceContraction(Mat & srcImg) {
     // }
     // LUT(srcImg, lookUpTable, srcImg);
     return outImg;
+}
+
+void ConnectedComponentLabeling(Mat srcImg) {
+    int numW = 0, numB = 0, numT = 0;;
+    for (int v=0; v<srcImg.rows; v++) {
+        uchar *data = srcImg.ptr<uchar>(v);
+        for (int u=0; u<srcImg.cols; u++) {
+            if (data[u] == 255){
+                // cout << "White" << endl;
+                numW ++;
+            }
+            if (data[u] == 0) {
+                // cout << "Black" << endl;
+                numB ++;
+            }
+            numT++;
+        }
+    }
+    cout << numW << " " << numB << endl;
+    cout << numW+numB << endl;
+    cout << numT << endl;
+    cout << srcImg.rows*srcImg.cols << endl;
 }
