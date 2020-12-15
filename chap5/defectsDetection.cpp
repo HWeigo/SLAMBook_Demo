@@ -36,8 +36,8 @@ int main (int argc, char **argv) {
     morphologyEx(imageEdge, imageClosed, MORPH_CLOSE, kernel);
     imshow("Closed image: ",imageClosed);
 
-    ConnectedComponentLabeling(imageEdge);
-
+    ConnectedComponentLabeling(imageClosed);
+    
     // imwrite("Blur.jpg", imageBlur);
 
 
@@ -100,23 +100,46 @@ Mat EnhanceContraction(Mat & srcImg) {
 }
 
 void ConnectedComponentLabeling(Mat srcImg) {
-    int numW = 0, numB = 0, numT = 0;;
+    Mat labelTable = Mat::zeros(srcImg.size(), srcImg.type());
+    int labelCurr = 1;
+    int numW = 0, numB = 0, numT = 0;
     for (int v=0; v<srcImg.rows; v++) {
-        uchar *data = srcImg.ptr<uchar>(v);
         for (int u=0; u<srcImg.cols; u++) {
-            if (data[u] == 255){
-                // cout << "White" << endl;
-                numW ++;
+            // If current pixel is black, then continue
+            if (srcImg.at<uchar>(v,u) == 0)
+                continue;
+
+            int minLabel = 1000;
+            // West
+            if (u != 0 && srcImg.at<uchar>(v,u-1) != 0) {
+                minLabel = MIN(labelTable.at<uchar>(v,u-1), minLabel);
             }
-            if (data[u] == 0) {
-                // cout << "Black" << endl;
-                numB ++;
+            // North West
+            if (u != 0 && v!=0 && srcImg.at<uchar>(v-1,u-1) != 0) {
+                minLabel = MIN(labelTable.at<uchar>(v-1,u-1), minLabel);
             }
-            numT++;
+            // North 
+            if (v!=0 && srcImg.at<uchar>(v-1,u) != 0) {
+                minLabel = MIN(labelTable.at<uchar>(v-1,u), minLabel);
+            }
+            // North East
+            if (u!=(srcImg.cols-1) && v!=0 && srcImg.at<uchar>(v-1,u+1) != 0) {
+                minLabel = MIN(labelTable.at<uchar>(v-1,u+1), minLabel);
+            }
+
+            if (minLabel == 1000) {
+                labelCurr += 1;
+                labelTable.at<uchar>(v,u) = labelCurr;
+            } else
+            {
+                labelTable.at<uchar>(v,u) = minLabel;
+            }
         }
     }
-    cout << numW << " " << numB << endl;
-    cout << numW+numB << endl;
-    cout << numT << endl;
-    cout << srcImg.rows*srcImg.cols << endl;
+
+    imshow("label", labelTable);
+    // cout << numW << " " << numB << endl;
+    // cout << numW+numB << endl;
+    // cout << numT << endl;
+    // cout << srcImg.rows*srcImg.cols << endl;
 }

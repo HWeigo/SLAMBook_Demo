@@ -10,6 +10,9 @@
 using namespace std;
 using namespace cv;
 
+// #define MAX(a,b)            (((a) > (b)) ? (a) : (b))
+// #define MIN(a,b)            (((a) < (b)) ? (a) : (b))
+
 Mat EnhanceContraction(Mat & srcImg);
 void ConnectedComponentLabeling(Mat srcImg);
 
