@@ -11,9 +11,6 @@
 using namespace std;
 using namespace cv;
 
-Mat EnhanceContraction(Mat & srcImg);
-void ConnectedComponentLabeling(Mat srcImg);
-
 class Set {
     private:
         int label;
@@ -58,10 +55,17 @@ class Set {
         int Size() {
             return pixels.size();
         }
+
+        vector<pair<int, int>>& Pixels() {
+            return pixels;
+        }
 }; 
 
 bool CompSet (Set a, Set b) {
     return (a.Size() > b.Size());
 }
+
+Mat EnhanceContraction(Mat & srcImg);
+vector<Set> ConnectedComponentLabeling(Mat srcImg);
 
 #endif
