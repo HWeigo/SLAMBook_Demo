@@ -57,38 +57,38 @@ include CMakeFiles/defectsDetection.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/defectsDetection.dir/flags.make
 
-CMakeFiles/defectsDetection.dir/defectsDetection.cpp.o: CMakeFiles/defectsDetection.dir/flags.make
-CMakeFiles/defectsDetection.dir/defectsDetection.cpp.o: ../defectsDetection.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap5/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/defectsDetection.dir/defectsDetection.cpp.o"
-	/usr/bin/g++-7  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/defectsDetection.dir/defectsDetection.cpp.o -c "/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap5/defectsDetection.cpp"
+CMakeFiles/defectsDetection.dir/main.cpp.o: CMakeFiles/defectsDetection.dir/flags.make
+CMakeFiles/defectsDetection.dir/main.cpp.o: ../main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap5/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/defectsDetection.dir/main.cpp.o"
+	/usr/bin/g++-7  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/defectsDetection.dir/main.cpp.o -c "/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap5/main.cpp"
 
-CMakeFiles/defectsDetection.dir/defectsDetection.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/defectsDetection.dir/defectsDetection.cpp.i"
-	/usr/bin/g++-7 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap5/defectsDetection.cpp" > CMakeFiles/defectsDetection.dir/defectsDetection.cpp.i
+CMakeFiles/defectsDetection.dir/main.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/defectsDetection.dir/main.cpp.i"
+	/usr/bin/g++-7 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap5/main.cpp" > CMakeFiles/defectsDetection.dir/main.cpp.i
 
-CMakeFiles/defectsDetection.dir/defectsDetection.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/defectsDetection.dir/defectsDetection.cpp.s"
-	/usr/bin/g++-7 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap5/defectsDetection.cpp" -o CMakeFiles/defectsDetection.dir/defectsDetection.cpp.s
+CMakeFiles/defectsDetection.dir/main.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/defectsDetection.dir/main.cpp.s"
+	/usr/bin/g++-7 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap5/main.cpp" -o CMakeFiles/defectsDetection.dir/main.cpp.s
 
-CMakeFiles/defectsDetection.dir/defectsDetection.cpp.o.requires:
+CMakeFiles/defectsDetection.dir/main.cpp.o.requires:
 
-.PHONY : CMakeFiles/defectsDetection.dir/defectsDetection.cpp.o.requires
+.PHONY : CMakeFiles/defectsDetection.dir/main.cpp.o.requires
 
-CMakeFiles/defectsDetection.dir/defectsDetection.cpp.o.provides: CMakeFiles/defectsDetection.dir/defectsDetection.cpp.o.requires
-	$(MAKE) -f CMakeFiles/defectsDetection.dir/build.make CMakeFiles/defectsDetection.dir/defectsDetection.cpp.o.provides.build
-.PHONY : CMakeFiles/defectsDetection.dir/defectsDetection.cpp.o.provides
+CMakeFiles/defectsDetection.dir/main.cpp.o.provides: CMakeFiles/defectsDetection.dir/main.cpp.o.requires
+	$(MAKE) -f CMakeFiles/defectsDetection.dir/build.make CMakeFiles/defectsDetection.dir/main.cpp.o.provides.build
+.PHONY : CMakeFiles/defectsDetection.dir/main.cpp.o.provides
 
-CMakeFiles/defectsDetection.dir/defectsDetection.cpp.o.provides.build: CMakeFiles/defectsDetection.dir/defectsDetection.cpp.o
+CMakeFiles/defectsDetection.dir/main.cpp.o.provides.build: CMakeFiles/defectsDetection.dir/main.cpp.o
 
 
 # Object files for target defectsDetection
 defectsDetection_OBJECTS = \
-"CMakeFiles/defectsDetection.dir/defectsDetection.cpp.o"
+"CMakeFiles/defectsDetection.dir/main.cpp.o"
 
 # External object files for target defectsDetection
 defectsDetection_EXTERNAL_OBJECTS =
 
-defectsDetection: CMakeFiles/defectsDetection.dir/defectsDetection.cpp.o
+defectsDetection: CMakeFiles/defectsDetection.dir/main.cpp.o
 defectsDetection: CMakeFiles/defectsDetection.dir/build.make
 defectsDetection: /usr/local/lib/libopencv_dnn.so.4.5.0
 defectsDetection: /usr/local/lib/libopencv_gapi.so.4.5.0
@@ -114,7 +114,7 @@ CMakeFiles/defectsDetection.dir/build: defectsDetection
 
 .PHONY : CMakeFiles/defectsDetection.dir/build
 
-CMakeFiles/defectsDetection.dir/requires: CMakeFiles/defectsDetection.dir/defectsDetection.cpp.o.requires
+CMakeFiles/defectsDetection.dir/requires: CMakeFiles/defectsDetection.dir/main.cpp.o.requires
 
 .PHONY : CMakeFiles/defectsDetection.dir/requires
 

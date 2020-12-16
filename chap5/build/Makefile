@@ -147,33 +147,6 @@ defectsDetection/fast:
 	$(MAKE) -f CMakeFiles/defectsDetection.dir/build.make CMakeFiles/defectsDetection.dir/build
 .PHONY : defectsDetection/fast
 
-defectsDetection.o: defectsDetection.cpp.o
-
-.PHONY : defectsDetection.o
-
-# target to build an object file
-defectsDetection.cpp.o:
-	$(MAKE) -f CMakeFiles/defectsDetection.dir/build.make CMakeFiles/defectsDetection.dir/defectsDetection.cpp.o
-.PHONY : defectsDetection.cpp.o
-
-defectsDetection.i: defectsDetection.cpp.i
-
-.PHONY : defectsDetection.i
-
-# target to preprocess a source file
-defectsDetection.cpp.i:
-	$(MAKE) -f CMakeFiles/defectsDetection.dir/build.make CMakeFiles/defectsDetection.dir/defectsDetection.cpp.i
-.PHONY : defectsDetection.cpp.i
-
-defectsDetection.s: defectsDetection.cpp.s
-
-.PHONY : defectsDetection.s
-
-# target to generate assembly for a file
-defectsDetection.cpp.s:
-	$(MAKE) -f CMakeFiles/defectsDetection.dir/build.make CMakeFiles/defectsDetection.dir/defectsDetection.cpp.s
-.PHONY : defectsDetection.cpp.s
-
 imageBasics.o: imageBasics.cpp.o
 
 .PHONY : imageBasics.o
@@ -201,6 +174,33 @@ imageBasics.cpp.s:
 	$(MAKE) -f CMakeFiles/imageBasics.dir/build.make CMakeFiles/imageBasics.dir/imageBasics.cpp.s
 .PHONY : imageBasics.cpp.s
 
+main.o: main.cpp.o
+
+.PHONY : main.o
+
+# target to build an object file
+main.cpp.o:
+	$(MAKE) -f CMakeFiles/defectsDetection.dir/build.make CMakeFiles/defectsDetection.dir/main.cpp.o
+.PHONY : main.cpp.o
+
+main.i: main.cpp.i
+
+.PHONY : main.i
+
+# target to preprocess a source file
+main.cpp.i:
+	$(MAKE) -f CMakeFiles/defectsDetection.dir/build.make CMakeFiles/defectsDetection.dir/main.cpp.i
+.PHONY : main.cpp.i
+
+main.s: main.cpp.s
+
+.PHONY : main.s
+
+# target to generate assembly for a file
+main.cpp.s:
+	$(MAKE) -f CMakeFiles/defectsDetection.dir/build.make CMakeFiles/defectsDetection.dir/main.cpp.s
+.PHONY : main.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -212,12 +212,12 @@ help:
 	@echo "... edit_cache"
 	@echo "... imageBasics"
 	@echo "... defectsDetection"
-	@echo "... defectsDetection.o"
-	@echo "... defectsDetection.i"
-	@echo "... defectsDetection.s"
 	@echo "... imageBasics.o"
 	@echo "... imageBasics.i"
 	@echo "... imageBasics.s"
+	@echo "... main.o"
+	@echo "... main.i"
+	@echo "... main.s"
 .PHONY : help
 
 

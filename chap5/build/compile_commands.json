@@ -6,7 +6,7 @@
 },
 {
   "directory": "/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap5/build",
-  "command": "/usr/bin/g++-7   -isystem /usr/local/include/opencv4  -g   -std=gnu++11 -o CMakeFiles/defectsDetection.dir/defectsDetection.cpp.o -c \"/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap5/defectsDetection.cpp\"",
-  "file": "/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap5/defectsDetection.cpp"
+  "command": "/usr/bin/g++-7   -isystem /usr/local/include/opencv4  -g   -std=gnu++11 -o CMakeFiles/defectsDetection.dir/main.cpp.o -c \"/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap5/main.cpp\"",
+  "file": "/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap5/main.cpp"
 }
 ]

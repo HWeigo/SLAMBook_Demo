@@ -156,16 +156,32 @@ void ConnectedComponentLabeling(Mat srcImg) {
 
     cout << setList.size() << endl;
 
+    
     for (int v=0; v<srcImg.rows; v++) {
         for (int u=0; u<srcImg.cols; u++) {
             if (srcImg.at<uchar>(v,u) == 0)
                 continue;
             int labelCurr = (int) labelTable.at<uchar>(v,u);
-            cout << "Current label: " << labelCurr << endl; 
-            labelTable.at<uchar>(v,u) = setList[labelCurr-1].FindRoot(setList);
-            cout << "Updated label: " << (int) labelTable.at<uchar>(v,u) << endl; 
+            int labelRoot = setList[labelCurr-1].FindRoot(setList);
+            // cout << "Current label: " << labelCurr << endl; 
+
+            labelTable.at<uchar>(v,u) = (uchar) labelRoot;
+            if (labelRoot == 1 || labelRoot == 10) {
+                labelTable.at<uchar>(v,u) = 200;
+            }
+            setList[labelRoot-1].PushBackPixels(u, v);
+            // cout << "Updated label: " << (int) labelTable.at<uchar>(v,u) << endl; 
         }
     }
+
+    sort(setList.begin(), setList.end(), CompSet);
+    // for (Set s : setList) {
+    //     if (s.IsRoot()) {
+    //         cout << "Label: " << s.Label() << endl;
+    //         cout << "Size: " << s.Size() << endl;
+
+    //     }
+    // }
 
 
     imshow("label_new", labelTable);

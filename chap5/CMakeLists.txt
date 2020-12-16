@@ -13,7 +13,7 @@ include_directories( ${OpenCV_INCLUDE_DIRS} )
 add_executable( imageBasics imageBasics.cpp )
 target_link_libraries( imageBasics ${OpenCV_LIBS} )
 
-add_executable( defectsDetection defectsDetection.cpp )
+add_executable( defectsDetection main.cpp )
 target_link_libraries( defectsDetection ${OpenCV_LIBS})
 
 add_test(test ./defectsDetection ../ori.jpg)

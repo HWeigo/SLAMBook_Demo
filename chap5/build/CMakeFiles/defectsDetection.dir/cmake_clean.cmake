@@ -1,5 +1,5 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/defectsDetection.dir/defectsDetection.cpp.o"
+  "CMakeFiles/defectsDetection.dir/main.cpp.o"
   "defectsDetection.pdb"
   "defectsDetection"
 )

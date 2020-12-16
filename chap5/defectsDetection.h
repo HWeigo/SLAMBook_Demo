@@ -6,6 +6,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <chrono>
+#include <unordered_map> 
 
 using namespace std;
 using namespace cv;
@@ -17,6 +18,7 @@ class Set {
     private:
         int label;
         int parent;
+        vector<pair<int, int>> pixels;
 
         int FindRootHelper(const vector<Set> &setList, int x) {
             if (setList[x-1].parent != x)
@@ -41,6 +43,25 @@ class Set {
             return parent;
         }
 
-};
+        void PushBackPixels(int u, int v) {
+            pixels.push_back(make_pair(u, v));
+        }
+
+        bool IsRoot () {
+            return parent == label;
+        }
+
+        int Label() {
+            return label;
+        }
+
+        int Size() {
+            return pixels.size();
+        }
+}; 
+
+bool CompSet (Set a, Set b) {
+    return (a.Size() > b.Size());
+}
 
 #endif
