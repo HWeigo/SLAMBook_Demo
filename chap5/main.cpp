@@ -25,23 +25,27 @@ int main (int argc, char **argv) {
     GaussianBlur(imageOri, imageBlur, Size(3,3), 1.0);
 #ifdef DEBUG_IMAGEDISPLAY
     imshow("Blur Image: ", imageBlur);
+    imwrite("Blur.jpg", imageBlur);
 #endif 
 
     imageEnhanced = EnhanceContraction(imageBlur);
     // equalizeHist(imageBlur, imageEnhanced);
 #ifdef DEBUG_IMAGEDISPLAY
     imshow("Enhanced Image: ", imageEnhanced);
+    imwrite("Enhanced.jpg", imageEnhanced);
 #endif
 
     bilateralFilter(imageEnhanced, imageFilter, 9, 75, 75);
 #ifdef DEBUG_IMAGEDISPLAY
     imshow("Filter Image: ", imageFilter);
+    imwrite("Filter.jpg", imageFilter);
 #endif
 
     // Implement Canny edge detection
     Canny(imageBlur, imageEdge, 20, 50);
 #ifdef DEBUG_IMAGEDISPLAY
     imshow("Canny Detection", imageEdge);
+    imwrite("Canny.jpg", imageEdge);
 #endif
 
     
@@ -49,6 +53,7 @@ int main (int argc, char **argv) {
     morphologyEx(imageEdge, imageClosed, MORPH_CLOSE, kernel);
 #ifdef DEBUG_IMAGEDISPLAY
     imshow("Closed image: ",imageClosed);
+    imwrite("ClosedImage.jpg", imageClosed);
 #endif
 
     vector<Set> setList;
