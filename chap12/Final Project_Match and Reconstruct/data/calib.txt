@@ -1,0 +1,11 @@
+left camera:
+	fx: 3997.684;  fy: 3997.684
+	cx: 1176.728; cy: 1011.728
+
+right camera:
+	fx: 3997.684;  fy: 3997.684
+	cx: 1307.839; cy: 1011.728
+
+baseline: 193.001
+
+image width: 2964; image height: 1988
