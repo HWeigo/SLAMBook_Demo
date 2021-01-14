@@ -4,6 +4,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <chrono>
 #include <unordered_map> 
+#include "SGM.h"
 
 using namespace std;
 using namespace cv;

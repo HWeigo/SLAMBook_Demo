@@ -6,6 +6,20 @@
 
 #IncludeRegexTransform: 
 
+/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap12/SGM.h
+iostream
+-
+opencv2/core/core.hpp
+-
+opencv2/highgui/highgui.hpp
+-
+opencv2/imgproc/imgproc.hpp
+-
+chrono
+-
+unordered_map
+-
+
 /home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap12/main.cpp
 iostream
 -
@@ -19,6 +33,8 @@ chrono
 -
 unordered_map
 -
+SGM.h
+/home/weihuang/Insync/hweigo@sjtu.edu.cn/OneDrive Biz/ALGO/SLAMBook_Demo/chap12/SGM.h
 
 /usr/local/include/opencv4/opencv2/core.hpp
 opencv2/core/cvdef.h

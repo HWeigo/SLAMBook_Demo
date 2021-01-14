@@ -15,7 +15,7 @@ class SGM
 {
 private:
     /* data */
-    vector<int> _cost;
+    vector<uint16_t> _cost;
     vector<uint32_t> _censusLeft;
     vector<uint32_t> _censusRight;
     // Mat disparityMap = Mat::zeros()
@@ -27,12 +27,14 @@ private:
     int _height;
     int _halfWindowSize;
 
+    uint16_t Hamming32(const uint32_t & x, const uint32_t & y);
 
 public:
     SGM(int width, int height, int minDisparity, int maxDisparity, int halfWindowSize);
     ~SGM();
 
     void ComputeCensus(Mat src, vector<uint32_t> &census);
+    void ConstructCostVolume();
 };
 
 SGM::SGM(int width, int height, int minDisparity, int maxDisparity, int halfWindowSize)

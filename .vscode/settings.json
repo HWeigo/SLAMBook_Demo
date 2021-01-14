@@ -5,7 +5,8 @@
         "ostream": "cpp",
         "cmath": "cpp",
         "iostream": "cpp",
-        "complex": "cpp"
+        "complex": "cpp",
+        "tensor": "cpp"
     },
     
 }

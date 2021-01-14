@@ -25,4 +25,31 @@ void SGM::ComputeCensus(Mat src, vector<uint32_t> &censusList) {
     }
 }
 
-void SGM::Construct
+uint16_t SGM::Hamming32(const uint32_t & x, const uint32_t & y) {
+    uint32_t dist = 0, val = x ^ y;
+
+	// Count the number of set bits
+	while (val) {
+		++dist;
+		val &= val - 1;
+	}
+
+	return dist;
+}
+
+void SGM::ConstructCostVolume() {
+    for (int v=0; v<_height; ++v) {
+        for (int u=0; u<_width; ++u) {
+            uint32_t leftCensus = _censusLeft[v*_width + u];
+            for (int i=_minDisparity; i<_maxDisparity; ++i) {
+                if (u-i < 0 || u-i >= _width) {
+                    _cost[_diesparityRange*(v*_width + u) + i - _minDisparity] = 0;
+                    continue;
+                }
+                uint32_t rightCensus = _censusRight[v*_width + u - i];
+                uint16_t cost = Hamming32(leftCensus, rightCensus);
+                _cost[_diesparityRange*(v*_width + u) + i - _minDisparity] = cost;
+            }
+        }
+    }
+}
