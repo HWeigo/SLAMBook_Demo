@@ -27,36 +27,42 @@ int main(int argc, char **argv) {
 
     cout << leftImgOri.size() << endl;
     cout << rightImgOri.size() << endl;
-    imshow("ori", leftImgOri);
+    // imshow("ori", leftImgOri);
 
     // Resize
     double scale = 0.25;
     int width = int(leftImgOri.size[0]*scale);
     int height = int(leftImgOri.size[1]*scale);
     Mat leftImgScale, rightImgScale;
-    resize(leftImgOri, leftImgScale, cv::Size(), 0.15, 0.15);
+    resize(leftImgOri, leftImgScale, cv::Size(), scale, scale);
+    resize(rightImgOri, rightImgScale, cv::Size(), scale, scale);
     imshow("left",leftImgScale);
+    cout << leftImgScale.size() << endl;
+    cout << rightImgScale.size() << endl;
 
     int halfWindowSize = 3;
     int cnt = 0;
 
-    Mat depth(leftImgOri.size(), CV_16U);
-    for (int v=halfWindowSize; v<(leftImgOri.rows-halfWindowSize); ++v) {
-        for (int u=halfWindowSize; u<(leftImgOri.cols-halfWindowSize); ++u) {
-            Rect box(u-halfWindowSize, v-halfWindowSize, halfWindowSize*2+1, halfWindowSize*2+1);
-            Mat A = leftImgOri(box);
-            int correspondence = EpipolarSearch(A, rightImgOri, v, halfWindowSize);
-            if (correspondence == -1) {
-                cerr << "Epipolar search failed" << endl;
-                return EXIT_FAILURE;
-            }
-           int disparity = u-correspondence;
-        }
-        cout << "Row: " << v << endl; 
-    }
+    // Mat depth(leftImgScale.size(), CV_16U);
+    // for (int v=halfWindowSize; v<(leftImgScale.rows-halfWindowSize); ++v) {
+    //     for (int u=halfWindowSize; u<(leftImgScale.cols-halfWindowSize); ++u) {
+    //         Rect box(u-halfWindowSize, v-halfWindowSize, halfWindowSize*2+1, halfWindowSize*2+1);
+    //         Mat A = leftImgScale(box);
+    //         int correspondence = EpipolarSearch(A, rightImgScale, v, halfWindowSize);
+    //         if (correspondence == -1) {
+    //             cerr << "Epipolar search failed" << endl;
+    //             return EXIT_FAILURE;
+    //         }
+    //     //    int disparity = u-correspondence;
+    //        depth.at<uchar>(u, v) = (uchar)(u-correspondence);
+    //     }
+    //     cout << "Row: " << v << endl; 
+    // }
+    // normalize(depth, depth, 0, 255, NORM_MINMAX);
+    
+    Mat depth = funcSSDR2L(leftImgScale, rightImgScale, 11, 0, 20, 1);
 
-    // Mat depth = funcSSDR2L(leftImgOri, rightImgOri, 7, 0, 1900, 1);
-
+    imshow("depth", depth);
     cout << "Done" << endl;
     waitKey(0);
 
@@ -122,7 +128,8 @@ Mat funcSSDR2L(Mat leftImage, Mat rightImage, int windowSize, int dispMin, int d
 			}
 			dispMap.at<uchar>(i, j) = bestMatchSoFar;
 		}
+        cout << "Row: " << i << endl;
 	}
-	// normalize(dispMap, dispMap, 0, 255, C);
+	normalize(dispMap, dispMap, 0, 255, NORM_MINMAX);
 	return dispMap;
 }

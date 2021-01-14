@@ -22,6 +22,7 @@ int main (int argc, char **argv) {
 #endif
 
     Mat imageBlur, imageEnhanced, imageFilter, imageEdge, imageClosed;
+    // Image smoothing
     GaussianBlur(imageOri, imageBlur, Size(3,3), 1.0);
 #ifdef DEBUG_IMAGEDISPLAY
     imshow("Blur Image: ", imageBlur);
@@ -49,6 +50,7 @@ int main (int argc, char **argv) {
 #endif
 
     
+    // Morphological closing the minor gaps
 	Mat kernel = getStructuringElement(MORPH_RECT, Size(5,5), Point(-1, -1));
     morphologyEx(imageEdge, imageClosed, MORPH_CLOSE, kernel);
 #ifdef DEBUG_IMAGEDISPLAY
@@ -59,6 +61,7 @@ int main (int argc, char **argv) {
     vector<Set> setList;
     setList = ConnectedComponentLabeling(imageClosed);
     
+    // Hightlight defects
     Mat imageColor = imread(argv[1], IMREAD_COLOR);
     for (Set s : setList) {
         if (s.IsRoot() && s.Size() > 100) {
@@ -114,22 +117,18 @@ vector<Set> ConnectedComponentLabeling(Mat srcImg) {
             // West
             if (u != 0 && srcImg.at<uchar>(v,u-1) != 0) {
                 neighboorLabels.emplace_back(labelTable.at<uchar>(v,u-1));
-                // minLabel = MIN(labelTable.at<uchar>(v,u-1), minLabel);
             }
             // North West
             if (u != 0 && v!=0 && srcImg.at<uchar>(v-1,u-1) != 0) {
                 neighboorLabels.emplace_back(labelTable.at<uchar>(v-1,u-1));
-                // minLabel = MIN(labelTable.at<uchar>(v-1,u-1), minLabel);
             }
             // North 
             if (v!=0 && srcImg.at<uchar>(v-1,u) != 0) {
                 neighboorLabels.emplace_back(labelTable.at<uchar>(v-1,u));
-                // minLabel = MIN(labelTable.at<uchar>(v-1,u), minLabel);
             }
             // North East
             if (u!=(srcImg.cols-1) && v!=0 && srcImg.at<uchar>(v-1,u+1) != 0) {
                 neighboorLabels.emplace_back(labelTable.at<uchar>(v-1,u+1));
-                // minLabel = MIN(labelTable.at<uchar>(v-1,u+1), minLabel);
             }
       
             if (neighboorLabels.empty()) {
@@ -207,26 +206,23 @@ Mat EnhanceContraction(Mat & srcImg) {
             // out[u] = saturate_cast<uchar>(pow(data[u]/255.0,0.7)*255);
         }
     }
-    minMaxIdx(outImg, minPtr, maxPtr);
-    for (int v=0; v<srcImg.rows; v++){
-        uchar *out = outImg.ptr<uchar>(v);
-        for (int u=0; u<srcImg.cols; u++) {
-            // out[u] =saturate_cast<uchar>(log(out[u]+1)/log(*maxPtr + 1)*255);
-            // out[u] = saturate_cast<uchar>((out[u]-*minPtr)/(*maxPtr - *minPtr)*255);
-            out[u] = saturate_cast<uchar>(pow(out[u]/255.0,1.7)*255);
-        }
-    }
-    minMaxIdx(outImg, minPtr, maxPtr);
-    for (int v=0; v<srcImg.rows; v++){
-        uchar *out = outImg.ptr<uchar>(v);
-        for (int u=0; u<srcImg.cols; u++) {
-            // out[u] =saturate_cast<uchar>(log(out[u]+1)/log(*maxPtr + 1)*255);
-            out[u] = saturate_cast<uchar>((out[u]-*minPtr)/(*maxPtr - *minPtr)*255);
-            // out[u] = saturate_cast<uchar>(pow(out[u]/255.0,1.7)*255);
-        }
-    }
-    minMaxIdx(outImg, minPtr, maxPtr);
-    cout << "Min vlaue: " << *minPtr << endl;
-    cout << "Max vlaue: " << *maxPtr << endl;
+    // minMaxIdx(outImg, minPtr, maxPtr);
+    // for (int v=0; v<srcImg.rows; v++){
+    //     uchar *out = outImg.ptr<uchar>(v);
+    //     for (int u=0; u<srcImg.cols; u++) {
+    //         // out[u] =saturate_cast<uchar>(log(out[u]+1)/log(*maxPtr + 1)*255);
+    //         // out[u] = saturate_cast<uchar>((out[u]-*minPtr)/(*maxPtr - *minPtr)*255);
+    //         out[u] = saturate_cast<uchar>(pow(out[u]/255.0,1.7)*255);
+    //     }
+    // }
+    // minMaxIdx(outImg, minPtr, maxPtr);
+    // for (int v=0; v<srcImg.rows; v++){
+    //     uchar *out = outImg.ptr<uchar>(v);
+    //     for (int u=0; u<srcImg.cols; u++) {
+    //         // out[u] =saturate_cast<uchar>(log(out[u]+1)/log(*maxPtr + 1)*255);
+    //         out[u] = saturate_cast<uchar>((out[u]-*minPtr)/(*maxPtr - *minPtr)*255);
+    //         // out[u] = saturate_cast<uchar>(pow(out[u]/255.0,1.7)*255);
+    //     }
+    // }
     return outImg;
 }

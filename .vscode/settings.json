@@ -3,7 +3,9 @@
     "powermode.enableShake": false,
     "files.associations": {
         "ostream": "cpp",
-        "cmath": "cpp"
+        "cmath": "cpp",
+        "iostream": "cpp",
+        "complex": "cpp"
     },
     
 }
