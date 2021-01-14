@@ -53,3 +53,4 @@ void SGM::ConstructCostVolume() {
         }
     }
 }
+

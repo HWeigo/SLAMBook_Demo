@@ -61,9 +61,13 @@ int main(int argc, char **argv) {
     // }
     // normalize(depth, depth, 0, 255, NORM_MINMAX);
     
-    Mat depth = funcSSDR2L(leftImgScale, rightImgScale, 11, 0, 20, 1);
+    Mat depth = funcSSDR2L(leftImgScale, rightImgScale, 5, 0, 80, 1);
+    Mat depthFilter;
+    bilateralFilter(depth, depthFilter, 9, 25, 50);
+    // GaussianBlur(depth, depth, 9, 75, 75);
 
     imshow("depth", depth);
+    imshow("filter", depthFilter);
     cout << "Done" << endl;
     waitKey(0);
 
