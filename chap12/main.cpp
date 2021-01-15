@@ -81,7 +81,8 @@ int main(int argc, char **argv) {
     // cout << leftImgScale.rows << endl;
     SGM sgmSolver(leftImgScale.cols, leftImgScale.rows, 0, 64, 5);
     sgmSolver.Match(leftImgScale, rightImgScale);
-    Mat disparity = sgmSolver.ConstructDisparity();
+    Mat disparity = sgmSolver.ConstructDisparityLeft();
+    
     imshow("disparity", disparity);
     waitKey(0);
 #endif

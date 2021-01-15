@@ -15,10 +15,11 @@ class SGM
 {
 private:
     /* data */
-    vector<uint16_t> _cost;
+    vector<uint16_t> _costLeft;
     vector<uint32_t> _censusLeft;
     vector<uint32_t> _censusRight;
     vector<uint16_t> _disparityLeft;
+    vector<uint16_t> _costRight;
     vector<uint16_t> _aggrationCostLR;
     vector<uint16_t> _aggrationCostRL;
     vector<uint16_t> _aggrationCostUD;
@@ -42,11 +43,12 @@ public:
     void ComputeCensus(Mat src, vector<uint32_t> &census);
     void ConstructCostVolume();
     void Match(Mat leftImg, Mat rightImg);
-    Mat ConstructDisparity();
+    Mat ConstructDisparityLeft();
     void AggregationLeftToRight(Mat src, int p1, int p2Init);
     void AggregationRightToLeft(Mat src, int p1, int p2Init);
     void AggregationUpToDown(Mat src, int p1, int p2Init);
     void AggregationDownToUp(Mat src, int p1, int p2Init);
+    Mat ConstructDisparityRight();
 };
 
 

@@ -11,7 +11,7 @@ SGM::SGM(int width, int height, int minDisparity, int maxDisparity, int halfWind
 
     _censusLeft.resize(_width * _height);
     _censusRight.resize(_width * _height);
-    _cost.resize(_width * _height * _diesparityRange);
+    _costLeft.resize(_width * _height * _diesparityRange);
     _disparityLeft.resize(_width * _height);
     _aggrationCostLR.resize(_width * _height * _diesparityRange);
     _aggrationCostRL.resize(_width * _height * _diesparityRange);
@@ -63,19 +63,19 @@ void SGM::ConstructCostVolume() {
             uint32_t leftCensus = _censusLeft[v*_width + u];
             for (int i=_minDisparity; i<_maxDisparity; ++i) {
                 if (u-i < 0 || u-i >= _width) {
-                    _cost[_diesparityRange*(v*_width + u) + i - _minDisparity] = INT16_MAX;
+                    _costLeft[_diesparityRange*(v*_width + u) + i - _minDisparity] = INT16_MAX / 2;
                     continue;
                 }
                 uint32_t rightCensus = _censusRight[v*_width + u - i];
                 uint16_t cost = Hamming32(leftCensus, rightCensus);
                 
-                _cost[_diesparityRange*(v*_width + u) + i - _minDisparity] = cost;
+                _costLeft[_diesparityRange*(v*_width + u) + i - _minDisparity] = cost;
             }
         }
     }
 }
 
-Mat SGM::ConstructDisparity() {
+Mat SGM::ConstructDisparityLeft() {
     Mat disparityMap = Mat(_height, _width, CV_8UC1);
     // for (int v=0; v<_height; ++v) {
     //     for (int u=0; u<_width; ++u) {
@@ -83,7 +83,7 @@ Mat SGM::ConstructDisparity() {
     //         uint16_t maxCost = 0;
     //         uint16_t bestMatch = 0;
     //         for (int i=_minDisparity; i<_maxDisparity; ++i) {
-    //             uint16_t currCost = _cost[_diesparityRange*(v*_width + u) + i];
+    //             uint16_t currCost = _costLeft[_diesparityRange*(v*_width + u) + i];
     //             if (currCost < minCost) {
     //                 bestMatch = i;
     //                 minCost = currCost;
@@ -115,7 +115,14 @@ Mat SGM::ConstructDisparity() {
                 }
                 maxCost = (currCost > maxCost)? currCost:maxCost;
             }
-            
+
+            // Fitting
+            // uint16_t prevMatch = (bestMatch != _minDisparity)? bestMatch-1 : bestMatch;
+            // uint16_t nextMatch = (bestMatch != _maxDisparity)? bestMatch+1 : bestMatch;
+            // uint16_t prevCost = _aggrationCostTotal[_diesparityRange*(v*_width + u) + prevMatch];
+            // uint16_t nextCost = _aggrationCostTotal[_diesparityRange*(v*_width + u) + nextMatch];
+            // uint16_t fitMatch = bestMatch + (prevCost - nextCost) / 2 / 
+
             disparityMap.at<uchar>(v, u) = bestMatch;
 
         }
@@ -126,11 +133,14 @@ Mat SGM::ConstructDisparity() {
 }
 
 void SGM::Match(Mat leftImg, Mat rightImg) {
+    // Compute census
     ComputeCensus(leftImg, _censusLeft);
     ComputeCensus(rightImg, _censusRight);
 
+    // Construct cost volume
     ConstructCostVolume();
 
+    // Aggregation
     int p1 = 10, p2Init = 150;
     AggregationLeftToRight(leftImg, p1, p2Init);
     AggregationRightToLeft(leftImg, p1, p2Init);
@@ -151,7 +161,7 @@ void SGM::AggregationLeftToRight(Mat src, int p1, int p2Init) {
 
         uint16_t lastPassMin = UINT16_MAX;
         for (int i=0; i<_diesparityRange; ++i) {
-            uint16_t C = _cost[_diesparityRange*(v*_width) + i];
+            uint16_t C = _costLeft[_diesparityRange*(v*_width) + i];
             _aggrationCostLR[v*_width*_diesparityRange + i] = C;
             lastPassMin = (C < lastPassMin) ? C : lastPassMin;
         }
@@ -161,7 +171,7 @@ void SGM::AggregationLeftToRight(Mat src, int p1, int p2Init) {
             uint16_t minCost = UINT16_MAX;
             uint16_t deltaGray = src.at<uchar>(v,u) - src.at<uchar>(v,u-1);
             for (int i=0; i<_diesparityRange; ++i) {
-                uint16_t C = _cost[_diesparityRange*(v*_width + u) + i];
+                uint16_t C = _costLeft[_diesparityRange*(v*_width + u) + i];
                 uint16_t L1 = _aggrationCostLR[_diesparityRange*(v*_width + u - 1) + i];
                 uint16_t L2 = (i > 0)? (_aggrationCostLR[_diesparityRange*(v*_width + u - 1) + i -1 ] + p1) : UINT16_MAX;
                 uint16_t L3 = (i < (_diesparityRange - 1))? (_aggrationCostLR[_diesparityRange*(v*_width + u - 1) + i + 1] + p1) : UINT16_MAX;
@@ -184,7 +194,7 @@ void SGM::AggregationRightToLeft(Mat src, int p1, int p2Init) {
 
         uint16_t lastPassMin = UINT16_MAX;
         for (int i=0; i<_diesparityRange; ++i) {
-            uint16_t C = _cost[_diesparityRange*((v+1)*_width - 1) + i]; 
+            uint16_t C = _costLeft[_diesparityRange*((v+1)*_width - 1) + i]; 
             _aggrationCostRL[_diesparityRange*((v+1)*_width - 1) + i] = C;
             lastPassMin = (C < lastPassMin) ? C : lastPassMin;
         }
@@ -194,7 +204,7 @@ void SGM::AggregationRightToLeft(Mat src, int p1, int p2Init) {
             uint16_t minCost = UINT16_MAX;
             uint16_t deltaGray = src.at<uchar>(v,u) - src.at<uchar>(v,u+1);
             for (int i=0; i<_diesparityRange; ++i) {
-                uint16_t C = _cost[_diesparityRange*(v*_width + u) + i];
+                uint16_t C = _costLeft[_diesparityRange*(v*_width + u) + i];
                 uint16_t L1 = _aggrationCostRL[_diesparityRange*(v*_width + u + 1) + i];
                 uint16_t L2 = (i > 0)? (_aggrationCostRL[_diesparityRange*(v*_width + u + 1) + i -1 ] + p1) : UINT16_MAX;
                 uint16_t L3 = (i < (_diesparityRange - 1))? (_aggrationCostRL[_diesparityRange*(v*_width + u + 1) + i + 1] + p1) : UINT16_MAX;
@@ -217,7 +227,7 @@ void SGM::AggregationUpToDown(Mat src, int p1, int p2Init) {
 
         uint16_t lastPassMin = UINT16_MAX;
         for (int i=0; i<_diesparityRange; ++i) {
-            uint16_t C = _cost[_diesparityRange*u  + i];
+            uint16_t C = _costLeft[_diesparityRange*u  + i];
             _aggrationCostUD[_diesparityRange*u  + i] = C;
             lastPassMin = (C < lastPassMin) ? C : lastPassMin;
         }
@@ -227,7 +237,7 @@ void SGM::AggregationUpToDown(Mat src, int p1, int p2Init) {
             uint16_t minCost = UINT16_MAX;
             uint16_t deltaGray = src.at<uchar>(v,u) - src.at<uchar>(v-1,u);
             for (int i=0; i<_diesparityRange; ++i) {
-                uint16_t C = _cost[_diesparityRange*(v*_width + u) + i];
+                uint16_t C = _costLeft[_diesparityRange*(v*_width + u) + i];
                 uint16_t L1 = _aggrationCostUD[_diesparityRange*((v-1)*_width + u) + i];
                 uint16_t L2 = (i > 0)? (_aggrationCostUD[_diesparityRange*((v-1)*_width + u) + i -1 ] + p1) : UINT16_MAX;
                 uint16_t L3 = (i < (_diesparityRange - 1))? (_aggrationCostUD[_diesparityRange*((v-1)*_width + u) + i + 1] + p1) : UINT16_MAX;
@@ -250,7 +260,7 @@ void SGM::AggregationDownToUp(Mat src, int p1, int p2Init) {
 
         uint16_t lastPassMin = UINT16_MAX;
         for (int i=0; i<_diesparityRange; ++i) {
-            uint16_t C = _cost[_diesparityRange*(_height-1)*_width + _diesparityRange*u + i];
+            uint16_t C = _costLeft[_diesparityRange*(_height-1)*_width + _diesparityRange*u + i];
             _aggrationCostDU[_diesparityRange*(_height-1)*_width + _diesparityRange*u  + i] = C;
             lastPassMin = (C < lastPassMin) ? C : lastPassMin;
         }
@@ -260,7 +270,7 @@ void SGM::AggregationDownToUp(Mat src, int p1, int p2Init) {
             uint16_t minCost = UINT16_MAX;
             uint16_t deltaGray = src.at<uchar>(v,u) - src.at<uchar>(v+1,u);
             for (int i=0; i<_diesparityRange; ++i) {
-                uint16_t C = _cost[_diesparityRange*(v*_width + u) + i];
+                uint16_t C = _costLeft[_diesparityRange*(v*_width + u) + i];
                 uint16_t L1 = _aggrationCostDU[_diesparityRange*((v+1)*_width + u) + i];
                 uint16_t L2 = (i > 0)? (_aggrationCostDU[_diesparityRange*((v+1)*_width + u) + i -1 ] + p1) : UINT16_MAX;
                 uint16_t L3 = (i < (_diesparityRange - 1))? (_aggrationCostDU[_diesparityRange*((v+1)*_width + u) + i + 1] + p1) : UINT16_MAX;
@@ -272,6 +282,14 @@ void SGM::AggregationDownToUp(Mat src, int p1, int p2Init) {
                 minCost = (totalCost < minCost)? totalCost : minCost;
             }
             lastPassMin = minCost;
+        }
+    }
+}
+
+Mat SGM::ConstructDisparityRight() {
+    for (int v=0; v<_height; ++v) {
+        for (int u=0; u<_width; ++u) {
+
         }
     }
 }
