@@ -90,7 +90,7 @@ int main(int argc, char **argv) {
     applyColorMap(disparityLeft, colorLeft, COLORMAP_JET);
     medianBlur(colorLeft, colorLeft, 3);
     imshow("color Left", colorLeft);  
-    // imwrite("ColorLeft.jpg", colorLeft);
+    // imwrite("cost.jpg", disparityLeft);
     waitKey(0);
 #endif
     

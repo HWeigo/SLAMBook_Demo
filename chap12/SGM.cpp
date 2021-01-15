@@ -210,7 +210,7 @@ void SGM::Match(Mat leftImg, Mat rightImg) {
     
     uint32_t n = _aggrationCostTotal.size();
     for (uint32_t i=0; i<n; ++i) {
-        // _aggrationCostTotal[i] = _aggrationCostLR[i] + _aggrationCostRL[i] ;
+        // _aggrationCostTotal[i] = _aggrationCostDU[i];
         _aggrationCostTotal[i] = _aggrationCostUD[i] + _aggrationCostDU[i] + _aggrationCostLR[i] + _aggrationCostRL[i];
     }
 }
