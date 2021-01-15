@@ -6,7 +6,12 @@
         "cmath": "cpp",
         "iostream": "cpp",
         "complex": "cpp",
-        "tensor": "cpp"
+        "tensor": "cpp",
+        "*.ipp": "cpp",
+        "array": "cpp",
+        "hash_map": "cpp",
+        "hash_set": "cpp",
+        "string_view": "cpp"
     },
     
 }

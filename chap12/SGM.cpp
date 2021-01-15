@@ -124,13 +124,73 @@ Mat SGM::ConstructDisparityLeft() {
             // uint16_t nextCost = _aggrationCostTotal[_diesparityRange*(v*_width + u) + nextMatch];
             // uint16_t fitMatch = bestMatch + (prevCost - nextCost) / 2 / 
 
-            disparityMap.at<uchar>(v, u) = 255 * (bestMatch - _minDisparity) / (_maxDisparity - _minDisparity);
+            // disparityMap.at<uchar>(v, u) = 255 * (bestMatch - _minDisparity) / (_maxDisparity - _minDisparity);
 
+            // Uniqueness Check
+            if (maxCost != minCost) {
+                disparityMap.at<uchar>(v, u) = bestMatch;
+
+                uint16_t secMinCost = UINT16_MAX;
+                for (int i=_minDisparity; i<_maxDisparity; ++i) {
+                    if (i == bestMatch)
+                        continue;
+                    uint16_t currCost = _aggrationCostTotal[_diesparityRange*(v*_width + u) + i];
+                    if (currCost < secMinCost) {
+                        secMinCost = currCost;
+                    }
+                }
+
+                if ((secMinCost - minCost) < (0.01 * minCost)) 
+                    disparityMap.at<uchar>(v, u) = UCHAR_MAX;
+            } else {
+                disparityMap.at<uchar>(v, u) = UCHAR_MAX;
+            }
         }
     }
+
+    disparityMap = FixInvalidPoint(disparityMap);
     /*******************************************/
 
+
+    // Normalization
+    for (int v=0; v<_height; ++v) {
+        for (int u=0; u<_width; ++u) {
+            disparityMap.at<uchar>(v, u) = 255 * (disparityMap.at<uchar>(v, u) - _minDisparity) / (_maxDisparity - _minDisparity);
+        }
+    }
+    
     return disparityMap;
+}
+
+Mat SGM::FixInvalidPoint(Mat srcImg) {
+
+    int windowSize = 2;
+    for (int v=0; v<_height; ++v) {
+        
+        for (int u=0; u<_width; ++u) {
+            if (srcImg.at<uchar>(v,u) != UCHAR_MAX)
+                continue;
+            
+            vector<uchar> neigh;
+                for (int j=-windowSize; j<=windowSize; ++j) {
+                    for (int i=-windowSize; i<=windowSize; ++i) {
+                        if ((u+i) < 0 || (u+i) >= _width || (v+j) < 0 || (v+j) >= _height)
+                            continue;
+                        if (srcImg.at<uchar>(v+j,u+i) != UCHAR_MAX)
+                            neigh.push_back(srcImg.at<uchar>(v+j,u+i));
+                    }
+                }
+            if (!neigh.empty()) {
+                int n = neigh.size();
+                srcImg.at<uchar>(v,u) = neigh[n / 2];
+            } else {
+                srcImg.at<uchar>(v,u) = 0;
+            }
+        }
+        
+    }
+
+    return srcImg;
 }
 
 void SGM::Match(Mat leftImg, Mat rightImg) {

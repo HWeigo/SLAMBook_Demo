@@ -88,9 +88,9 @@ int main(int argc, char **argv) {
 
     Mat colorLeft;
     applyColorMap(disparityLeft, colorLeft, COLORMAP_JET);
-    medianBlur(colorLeft, colorLeft, 5);
-    imshow("color Left", colorLeft);
-
+    medianBlur(colorLeft, colorLeft, 3);
+    imshow("color Left", colorLeft);  
+    // imwrite("ColorLeft.jpg", colorLeft);
     waitKey(0);
 #endif
     

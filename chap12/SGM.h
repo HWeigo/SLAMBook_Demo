@@ -52,6 +52,7 @@ public:
     void AggregationDownToUp(Mat src, int p1, int p2Init);
     Mat ConstructDisparityRight();
     void LeftRightConsistency();
+    Mat FixInvalidPoint(Mat src);
 };
 
 
