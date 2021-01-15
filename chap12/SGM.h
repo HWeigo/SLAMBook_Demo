@@ -19,7 +19,11 @@ private:
     vector<uint32_t> _censusLeft;
     vector<uint32_t> _censusRight;
     vector<uint16_t> _disparityLeft;
-    vector<uint16_t> _aggrationCost;
+    vector<uint16_t> _aggrationCostLR;
+    vector<uint16_t> _aggrationCostRL;
+    vector<uint16_t> _aggrationCostUD;
+    vector<uint16_t> _aggrationCostDU;
+    vector<uint16_t> _aggrationCostTotal;
     // Mat disparityMap = Mat::zeros()
 
     int _minDisparity;
@@ -39,7 +43,10 @@ public:
     void ConstructCostVolume();
     void Match(Mat leftImg, Mat rightImg);
     Mat ConstructDisparity();
-    void AggregationLeftToRight(Mat src, int p1, int p2);
+    void AggregationLeftToRight(Mat src, int p1, int p2Init);
+    void AggregationRightToLeft(Mat src, int p1, int p2Init);
+    void AggregationUpToDown(Mat src, int p1, int p2Init);
+    void AggregationDownToUp(Mat src, int p1, int p2Init);
 };
 
 
