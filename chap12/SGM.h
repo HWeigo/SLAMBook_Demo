@@ -43,7 +43,7 @@ public:
     // ~SGM();
 
     void ComputeCensus(Mat src, vector<uint32_t> &census);
-    // void Compute
+    void ComputeNCC(Mat leftImg, Mat rightImg, int windowSize, int STEP);
     void ConstructCostVolume();
     void Match(Mat leftImg, Mat rightImg);
     Mat ConstructDisparityLeft();

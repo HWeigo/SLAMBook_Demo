@@ -76,6 +76,44 @@ void SGM::ConstructCostVolume() {
     }
 }
 
+void SGM::ComputeNCC(Mat leftImg, Mat rightImg, int windowSize, int STEP) {
+	int win = (windowSize - 1) / 2;
+
+    for (int i=0; i<_costLeft.size(); ++i) {
+        _costLeft[i] = INT16_MAX / 2;
+    }
+	for (int i = 0 + win; i <= _height -1 - win; i = i + STEP)
+	{
+		for (int j = 0 + win; j <= _width - win - _maxDisparity; j = j + STEP)
+		{
+			double prevNCC = 0.0;
+			int bestMatchSoFar = _minDisparity;
+			for (int dispRange = _minDisparity; dispRange <= _maxDisparity; dispRange++)
+			{
+				double ncc = 0.0;
+				double nccNumberator = 0.0;
+				double nccDenominator = 0.0;
+				double nccDenominatorRightWindow = 0.0;
+				double nccDenominatorLeftWindow = 0.0;
+				for (int a = -win; a <= win; a++)
+				{
+					for (int b = -win; b <= win; b++)
+					{
+						nccNumberator += rightImg.at<uchar>(i + a, j + b)*leftImg.at<uchar>(i + a, j + b + dispRange);
+						nccDenominatorRightWindow += rightImg.at<uchar>(i + a, j + b)*rightImg.at<uchar>(i + a, j + b);
+						nccDenominatorLeftWindow += leftImg.at<uchar>(i + a, j + b + dispRange)*leftImg.at<uchar>(i + a, j + b + dispRange);
+					}
+				}
+				nccDenominator = sqrt(nccDenominatorRightWindow*nccDenominatorLeftWindow);
+				ncc = nccNumberator / nccDenominator;
+                _costLeft[_diesparityRange*(i*_width + j) + dispRange - _minDisparity] = (uint16_t) ncc;
+		    }
+	    }
+    }
+
+}
+
+
 Mat SGM::ConstructDisparityLeft() {
     Mat disparityMap = Mat(_height, _width, CV_8UC1);
     // for (int v=0; v<_height; ++v) {
@@ -200,6 +238,9 @@ void SGM::Match(Mat leftImg, Mat rightImg) {
 
     // Construct cost volume
     ConstructCostVolume();
+
+    // NCC cost
+    ComputeNCC(leftImg, rightImg, 5, 1);
 
     // Aggregation
     int p1 = 10, p2Init = 150;
