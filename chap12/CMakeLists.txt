@@ -9,7 +9,7 @@ find_package( OpenCV REQUIRED )
 include_directories( ${OpenCV_INCLUDE_DIRS} )
 
 
-add_executable( reconstruction main.cpp )
+add_executable( reconstruction main.cpp SGM.cpp )
 target_link_libraries( reconstruction ${OpenCV_LIBS})
 
 # add_test(test ./defectsDetection ../ori.jpg)

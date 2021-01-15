@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/reconstruction.dir/main.cpp.o"
+  "CMakeFiles/reconstruction.dir/SGM.cpp.o"
   "reconstruction.pdb"
   "reconstruction"
 )

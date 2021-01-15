@@ -18,6 +18,8 @@ private:
     vector<uint16_t> _cost;
     vector<uint32_t> _censusLeft;
     vector<uint32_t> _censusRight;
+    vector<uint16_t> _disparityLeft;
+    vector<uint16_t> _aggrationCost;
     // Mat disparityMap = Mat::zeros()
 
     int _minDisparity;
@@ -31,30 +33,19 @@ private:
 
 public:
     SGM(int width, int height, int minDisparity, int maxDisparity, int halfWindowSize);
-    ~SGM();
+    // ~SGM();
 
     void ComputeCensus(Mat src, vector<uint32_t> &census);
     void ConstructCostVolume();
+    void Match(Mat leftImg, Mat rightImg);
+    Mat ConstructDisparity();
+    void AggregationLeftToRight(int p1, int p2);
 };
 
-SGM::SGM(int width, int height, int minDisparity, int maxDisparity, int halfWindowSize)
-{
-    _maxDisparity = maxDisparity;
-    _minDisparity = minDisparity;
-    _diesparityRange = maxDisparity - minDisparity;
-    _width = width;
-    _height = height;
-    _halfWindowSize = halfWindowSize;
-
-    _censusLeft.resize(_width * _height);
-    _censusRight.resize(_width * _height);
-    _cost.resize(_width * _height * _diesparityRange);
-}
-
-SGM::~SGM()
-{
-}
 
 
+// SGM::~SGM()
+// {
+// }
 
 #endif

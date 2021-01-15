@@ -134,6 +134,33 @@ reconstruction/fast:
 	$(MAKE) -f CMakeFiles/reconstruction.dir/build.make CMakeFiles/reconstruction.dir/build
 .PHONY : reconstruction/fast
 
+SGM.o: SGM.cpp.o
+
+.PHONY : SGM.o
+
+# target to build an object file
+SGM.cpp.o:
+	$(MAKE) -f CMakeFiles/reconstruction.dir/build.make CMakeFiles/reconstruction.dir/SGM.cpp.o
+.PHONY : SGM.cpp.o
+
+SGM.i: SGM.cpp.i
+
+.PHONY : SGM.i
+
+# target to preprocess a source file
+SGM.cpp.i:
+	$(MAKE) -f CMakeFiles/reconstruction.dir/build.make CMakeFiles/reconstruction.dir/SGM.cpp.i
+.PHONY : SGM.cpp.i
+
+SGM.s: SGM.cpp.s
+
+.PHONY : SGM.s
+
+# target to generate assembly for a file
+SGM.cpp.s:
+	$(MAKE) -f CMakeFiles/reconstruction.dir/build.make CMakeFiles/reconstruction.dir/SGM.cpp.s
+.PHONY : SGM.cpp.s
+
 main.o: main.cpp.o
 
 .PHONY : main.o
@@ -171,6 +198,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... reconstruction"
 	@echo "... test"
+	@echo "... SGM.o"
+	@echo "... SGM.i"
+	@echo "... SGM.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

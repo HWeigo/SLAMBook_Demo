@@ -1,16 +1,18 @@
-#include <iostream>
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <chrono>
-#include <unordered_map> 
+// #include <iostream>
+// #include <opencv2/core/core.hpp>
+// #include <opencv2/highgui/highgui.hpp>
+// #include <opencv2/imgproc/imgproc.hpp>
+// #include <chrono>
+// #include <unordered_map> 
 #include "SGM.h"
 
-using namespace std;
-using namespace cv;
+// using namespace std;
+// using namespace cv;
 
 int EpipolarSearch(Mat A, Mat right, int v, int halfWindowSize);
 Mat funcSSDR2L(Mat leftImage, Mat rightImage, int windowSize, int dispMin, int dispMax, int STEP);
+
+#define SGM_ALGO
 
 int main(int argc, char **argv) {
 
@@ -44,6 +46,8 @@ int main(int argc, char **argv) {
     int halfWindowSize = 3;
     int cnt = 0;
 
+#ifndef SGM_ALGO
+/*********************/
     // Mat depth(leftImgScale.size(), CV_16U);
     // for (int v=halfWindowSize; v<(leftImgScale.rows-halfWindowSize); ++v) {
     //     for (int u=halfWindowSize; u<(leftImgScale.cols-halfWindowSize); ++u) {
@@ -60,7 +64,8 @@ int main(int argc, char **argv) {
     //     cout << "Row: " << v << endl; 
     // }
     // normalize(depth, depth, 0, 255, NORM_MINMAX);
-    
+/*********************/
+
     Mat depth = funcSSDR2L(leftImgScale, rightImgScale, 5, 0, 80, 1);
     Mat depthFilter;
     bilateralFilter(depth, depthFilter, 9, 25, 50);
@@ -70,6 +75,17 @@ int main(int argc, char **argv) {
     imshow("filter", depthFilter);
     cout << "Done" << endl;
     waitKey(0);
+#endif
+
+#ifdef SGM_ALGO
+    // cout << leftImgScale.rows << endl;
+    SGM sgmSolver(leftImgScale.cols, leftImgScale.rows, 0, 64, 5);
+    sgmSolver.Match(leftImgScale, rightImgScale);
+    Mat disparity = sgmSolver.ConstructDisparity();
+    imshow("disparity", disparity);
+    waitKey(0);
+#endif
+    
 
     return EXIT_SUCCESS;
 }
