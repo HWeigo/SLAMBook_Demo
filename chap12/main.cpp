@@ -33,7 +33,7 @@ int main(int argc, char **argv) {
     // imshow("ori", leftImgOri);
 
     // Resize
-    double scale = 0.25;
+    double scale = 0.24;
     int width = int(leftImgOri.size[0]*scale);
     int height = int(leftImgOri.size[1]*scale);
     Mat leftImgScale, rightImgScale;
@@ -81,9 +81,16 @@ int main(int argc, char **argv) {
     // cout << leftImgScale.rows << endl;
     SGM sgmSolver(leftImgScale.cols, leftImgScale.rows, 0, 64, 5);
     sgmSolver.Match(leftImgScale, rightImgScale);
-    Mat disparity = sgmSolver.ConstructDisparityLeft();
-    
-    imshow("disparity", disparity);
+    Mat disparityLeft = sgmSolver.ConstructDisparityLeft();
+    Mat disparityRight = sgmSolver.ConstructDisparityRight();
+    imshow("disparity Left", disparityLeft);
+    imshow("disparity Right", disparityRight);
+
+    Mat colorLeft;
+    applyColorMap(disparityLeft, colorLeft, COLORMAP_JET);
+    medianBlur(colorLeft, colorLeft, 5);
+    imshow("color Left", colorLeft);
+
     waitKey(0);
 #endif
     

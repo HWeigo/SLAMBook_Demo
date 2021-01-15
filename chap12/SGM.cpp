@@ -13,6 +13,7 @@ SGM::SGM(int width, int height, int minDisparity, int maxDisparity, int halfWind
     _censusRight.resize(_width * _height);
     _costLeft.resize(_width * _height * _diesparityRange);
     _disparityLeft.resize(_width * _height);
+    _disparityRight.resize(_width * _height);
     _aggrationCostLR.resize(_width * _height * _diesparityRange);
     _aggrationCostRL.resize(_width * _height * _diesparityRange);
     _aggrationCostUD.resize(_width * _height * _diesparityRange);
@@ -91,7 +92,7 @@ Mat SGM::ConstructDisparityLeft() {
     //             maxCost = (currCost > maxCost)? currCost:maxCost;
     //         }
             
-    //         disparityMap.at<uchar>(v, u) = bestMatch;
+    //         disparityMap.at<uchar>(v, u) = 255 * (bestMatch - _minDisparity) / (_maxDisparity - _minDisparity);
     //         // if (minCost != maxCost) {
     //         //     // _disparityLeft[]
                 
@@ -123,7 +124,7 @@ Mat SGM::ConstructDisparityLeft() {
             // uint16_t nextCost = _aggrationCostTotal[_diesparityRange*(v*_width + u) + nextMatch];
             // uint16_t fitMatch = bestMatch + (prevCost - nextCost) / 2 / 
 
-            disparityMap.at<uchar>(v, u) = bestMatch;
+            disparityMap.at<uchar>(v, u) = 255 * (bestMatch - _minDisparity) / (_maxDisparity - _minDisparity);
 
         }
     }
@@ -287,9 +288,29 @@ void SGM::AggregationDownToUp(Mat src, int p1, int p2Init) {
 }
 
 Mat SGM::ConstructDisparityRight() {
+    Mat disparityMap = Mat(_height, _width, CV_8UC1);
     for (int v=0; v<_height; ++v) {
         for (int u=0; u<_width; ++u) {
+            uint16_t minCost = UINT16_MAX;
+            uint16_t bestMatch = 0;
+            for (int i=_minDisparity; i<_maxDisparity; ++i) {
+                if ((u + i) < _width) {
+                    uint16_t currCost = _aggrationCostTotal[_diesparityRange*(v*_width + u + i) + i];
+                    // _costRight[_diesparityRange*(v*_width + u) + i] = costCorr;
+                    if (currCost < minCost) {
+                        bestMatch = i;
+                        minCost = currCost;
+                    }
+                }             
+            }
 
+            disparityMap.at<uchar>(v, u) = bestMatch;
         }
     }
+
+    return disparityMap;
+}
+
+void SGM::LeftRightConsistency() {
+
 }
