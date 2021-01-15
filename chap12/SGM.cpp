@@ -107,25 +107,37 @@ void SGM::Match(Mat leftImg, Mat rightImg) {
     ConstructCostVolume();
 }
 
-void SGM::AggregationLeftToRight(int p1, int p2Init) {
+void SGM::AggregationLeftToRight(Mat src, int p1, int p2Init) {
     for (int v=0; v<_height; ++v) {
         // Initial the first pixel
-        _aggrationCost[v*_width * _diesparityRange]
-        uint16_t lastPassMin = 0;
+        // _aggrationCost[v*_width * _diesparityRange]
+
+        uint16_t lastPassMin = UINT16_MAX;
+        for (int i=0; i<_diesparityRange; ++i) {
+            uint16_t C = _cost[_diesparityRange*(v*_width) + i];
+            _aggrationCost[v*_width*_diesparityRange + i] = C;
+            lastPassMin = (C < lastPassMin) ? C : lastPassMin;
+        }
+
+        
         for (int u=1; u<_width; ++u) {
-            uint16_t minCost = UINT16_MAX;
+            // uint16_t minCost = UINT16_MAX;
+            lastPassMin = UINT16_MAX;
             for (int i=0; i<_diesparityRange; ++i) {
                 uint16_t C = _cost[_diesparityRange*(v*_width + u) + i];
-                uint16_t L1 = 
-                uint16_t L2 = 
-                uint16_t L3 = 
-                uint16_t L4 = 
+                uint16_t L1 = _aggrationCost[_diesparityRange*(v*_width + u - 1) + i];
+                uint16_t L2 = (i > 0)? (_aggrationCost[_diesparityRange*(v*_width + u - 1) + i -1 ] + p1) : UINT16_MAX;
+                uint16_t L3 = (i < (_diesparityRange - 1))? (_aggrationCost[_diesparityRange*(v*_width + u - 1) + i + 1] + p1) : UINT16_MAX;
+                uint16_t deltaGray = src.at<uchar>(v,u) - src.at<uchar>(v,u-1);
+                uint16_t L4 = + p2Init / deltaGray;
 
+                uint16_t totalCost = C + MIN(MIN(L1,L2), MIN(L3,L4)) - lastPassMin;
 
-                _aggrationCost[v*_width*_diesparityRange + u*_diesparityRange + i] = 
-                minCost = (minCost > *** )? *** : minCost;
+                _aggrationCost[v*_width*_diesparityRange + u*_diesparityRange + i] = totalCost;
+                // minCost = (minCost > *** )? *** : minCost;
+                lastPassMin = (totalCost < lastPassMin) ? totalCost : lastPassMin;
             }
-            lastPassMin = minCost;
+            // lastPassMin = minCost;
         }
 
     }

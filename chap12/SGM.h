@@ -39,7 +39,7 @@ public:
     void ConstructCostVolume();
     void Match(Mat leftImg, Mat rightImg);
     Mat ConstructDisparity();
-    void AggregationLeftToRight(int p1, int p2);
+    void AggregationLeftToRight(Mat src, int p1, int p2);
 };
 
 
