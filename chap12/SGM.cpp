@@ -94,9 +94,30 @@ Mat SGM::ConstructDisparity() {
             // } else {
             //      disparityMap.at<uchar>[v][u] = INVALID
             // }
-            
         }
     }
+
+    /*********  USE AGGRAGATION ***************/
+    // for (int v=0; v<_height; ++v) {
+    //     for (int u=0; u<_width; ++u) {
+    //         uint16_t minCost = UINT16_MAX;
+    //         uint16_t maxCost = 0;
+    //         uint16_t bestMatch = 0;
+    //         for (int i=_minDisparity; i<_maxDisparity; ++i) {
+    //             uint16_t currCost = _aggrationCost[_diesparityRange*(v*_width + u) + i];
+    //             if (currCost < minCost) {
+    //                 bestMatch = i;
+    //                 minCost = currCost;
+    //             }
+    //             maxCost = (currCost > maxCost)? currCost:maxCost;
+    //         }
+            
+    //         disparityMap.at<uchar>(v, u) = bestMatch;
+
+    //     }
+    // }
+    /*******************************************/
+
     return disparityMap;
 }
 
@@ -105,6 +126,7 @@ void SGM::Match(Mat leftImg, Mat rightImg) {
     ComputeCensus(rightImg, _censusRight);
 
     ConstructCostVolume();
+    AggregationLeftToRight(leftImg, 10, 150);
 }
 
 void SGM::AggregationLeftToRight(Mat src, int p1, int p2Init) {
@@ -121,23 +143,21 @@ void SGM::AggregationLeftToRight(Mat src, int p1, int p2Init) {
 
         
         for (int u=1; u<_width; ++u) {
-            // uint16_t minCost = UINT16_MAX;
-            lastPassMin = UINT16_MAX;
+            uint16_t minCost = UINT16_MAX;
+            uint16_t deltaGray = src.at<uchar>(v,u) - src.at<uchar>(v,u-1);
             for (int i=0; i<_diesparityRange; ++i) {
                 uint16_t C = _cost[_diesparityRange*(v*_width + u) + i];
                 uint16_t L1 = _aggrationCost[_diesparityRange*(v*_width + u - 1) + i];
                 uint16_t L2 = (i > 0)? (_aggrationCost[_diesparityRange*(v*_width + u - 1) + i -1 ] + p1) : UINT16_MAX;
                 uint16_t L3 = (i < (_diesparityRange - 1))? (_aggrationCost[_diesparityRange*(v*_width + u - 1) + i + 1] + p1) : UINT16_MAX;
-                uint16_t deltaGray = src.at<uchar>(v,u) - src.at<uchar>(v,u-1);
-                uint16_t L4 = + p2Init / deltaGray;
+                uint16_t L4 = + p2Init / (deltaGray + 1);
 
                 uint16_t totalCost = C + MIN(MIN(L1,L2), MIN(L3,L4)) - lastPassMin;
 
                 _aggrationCost[v*_width*_diesparityRange + u*_diesparityRange + i] = totalCost;
-                // minCost = (minCost > *** )? *** : minCost;
-                lastPassMin = (totalCost < lastPassMin) ? totalCost : lastPassMin;
+                minCost = (totalCost < minCost)? totalCost : minCost;
             }
-            // lastPassMin = minCost;
+            lastPassMin = minCost;
         }
 
     }
