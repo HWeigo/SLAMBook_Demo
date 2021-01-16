@@ -190,12 +190,12 @@ Mat SGM::ConstructDisparityLeft() {
     /*******************************************/
 
 
-    // Normalization
-    for (int v=0; v<_height; ++v) {
-        for (int u=0; u<_width; ++u) {
-            disparityMap.at<uchar>(v, u) = 255 * (disparityMap.at<uchar>(v, u) - _minDisparity) / (_maxDisparity - _minDisparity);
-        }
-    }
+    // // Normalization
+    // for (int v=0; v<_height; ++v) {
+    //     for (int u=0; u<_width; ++u) {
+    //         disparityMap.at<uchar>(v, u) = 255 * (disparityMap.at<uchar>(v, u) - _minDisparity) / (_maxDisparity - _minDisparity);
+    //     }
+    // }
     
     return disparityMap;
 }
@@ -240,7 +240,7 @@ void SGM::Match(Mat leftImg, Mat rightImg) {
     ConstructCostVolume();
 
     // NCC cost
-    ComputeNCC(leftImg, rightImg, 5, 1);
+    // ComputeNCC(leftImg, rightImg, 5, 1);
 
     // Aggregation
     int p1 = 10, p2Init = 150;
@@ -289,7 +289,6 @@ void SGM::AggregationLeftToRight(Mat src, int p1, int p2Init) {
     }
 }
 
-// ->
 void SGM::AggregationRightToLeft(Mat src, int p1, int p2Init) {
     for (int v=0; v<_height; ++v) {
         // Initial the first pixel
@@ -388,6 +387,21 @@ void SGM::AggregationDownToUp(Mat src, int p1, int p2Init) {
     }
 }
 
+void SGM::LeftRightConsistency(int T) {
+    for (int v=0; v<_height; ++v) {
+        for (int u=0; u<_width; ++u) {
+            uint16_t leftDisp = _disparityLeft[v*_width + u];
+
+            if (u - leftDisp < 0  || u - leftDisp >= _width)
+                continue;
+
+            uint16_t rightDisp = _disparityRight[v*_width + u - leftDisp];
+            if (leftDisp - rightDisp > T)
+                _disparityLeft[v*_width + u] = UINT16_MAX;
+        }
+    }
+}
+
 Mat SGM::ConstructDisparityRight() {
     Mat disparityMap = Mat(_height, _width, CV_8UC1);
     for (int v=0; v<_height; ++v) {
@@ -412,6 +426,3 @@ Mat SGM::ConstructDisparityRight() {
     return disparityMap;
 }
 
-void SGM::LeftRightConsistency() {
-
-}

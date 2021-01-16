@@ -12,6 +12,7 @@
 int EpipolarSearch(Mat A, Mat right, int v, int halfWindowSize);
 Mat funcSSDR2L(Mat leftImage, Mat rightImage, int windowSize, int dispMin, int dispMax, int STEP);
 Mat funcNCCR2L(Mat leftImage, Mat rightImage, int windowSize, int dispMin, int dispMax, int STEP);
+Mat funcSADR2L(Mat leftImage, Mat rightImage, int windowSize, int dispMin, int dispMax, int STEP);
 #define SGM_ALGO
 
 int main(int argc, char **argv) {
@@ -28,8 +29,8 @@ int main(int argc, char **argv) {
         return EXIT_FAILURE;
     }
 
-    cout << leftImgOri.size() << endl;
-    cout << rightImgOri.size() << endl;
+    cout << "Original left image size : " << leftImgOri.size();
+    cout << "\tOriginal right image size : " <<rightImgOri.size() << endl;
     // imshow("ori", leftImgOri);
 
     // Resize
@@ -40,9 +41,11 @@ int main(int argc, char **argv) {
     resize(leftImgOri, leftImgScale, cv::Size(), scale, scale);
     resize(rightImgOri, rightImgScale, cv::Size(), scale, scale);
     imshow("left",leftImgScale);
-    cout << leftImgScale.size() << endl;
-    cout << rightImgScale.size() << endl;
-
+    cout << "Scaled left image size : " << leftImgScale.size();
+    cout << "\tScaled left image size : " << rightImgScale.size() << endl;
+    imwrite("left_s.jpg", leftImgScale);
+    imwrite("right_s.jpg", rightImgScale);
+    
     int halfWindowSize = 3;
     int cnt = 0;
 
@@ -66,22 +69,38 @@ int main(int argc, char **argv) {
     // normalize(depth, depth, 0, 255, NORM_MINMAX);
 /*********************/
 
+    auto start = std::chrono::system_clock::now();
     // Mat depth = funcSSDR2L(leftImgScale, rightImgScale, 5, 0, 64, 1);
     Mat depth = funcNCCR2L(leftImgScale, rightImgScale, 5, 0, 64, 1);
+    // Mat depth = funcSADR2L(leftImgScale, rightImgScale, 5, 0, 64, 1);
     Mat depthFilter;
     bilateralFilter(depth, depthFilter, 9, 25, 50);
     // GaussianBlur(depth, depth, 9, 75, 75);
 
+    auto end = std::chrono::system_clock::now();
+	std::chrono::duration<double> elapsed_sec = end - start;
+	std::cout << "\n----- DONE! -----" << std::endl;
+	std::cout << "Total used time: " << elapsed_sec.count() << "s." << std::endl;
+
     imshow("depth", depth);
     imshow("filter", depthFilter);
-    // Mat 
+    // imwrite("SAD.jpg", depthFilter);
+
     applyColorMap(depth, depth, COLORMAP_JET);
+    applyColorMap(depthFilter, depthFilter, COLORMAP_JET);
     imshow("color", depth);
+    imshow("color filter", depthFilter);
+    // imwrite("SAD_c.jpg", depthFilter);
+    
+    
+
+
     cout << "Done" << endl;
     waitKey(0);
 #endif
 
 #ifdef SGM_ALGO
+    auto start = std::chrono::system_clock::now();
     SGM sgmSolver(leftImgScale.cols, leftImgScale.rows, 0, 64, 5);
     sgmSolver.Match(leftImgScale, rightImgScale);
     Mat disparityLeft = sgmSolver.ConstructDisparityLeft();
@@ -89,11 +108,43 @@ int main(int argc, char **argv) {
     imshow("disparity Left", disparityLeft);
     imshow("disparity Right", disparityRight);
 
+
+	double fx = 3997.684 * scale * 0.001;
+	double fy = 3997.684 * scale * 0.001;
+	double cx = 1176.728 * scale;
+	double cy = 1011.728 * scale;
+	double b = 193.001;
+	ofstream outFile;
+	outFile.open("PointCloud.txt");
+	outFile << "x/m\ty/m\tz/m\n";
+	for (int v=disparityLeft.rows-1; v>=0; --v) {
+		for (int u=disparityLeft.cols-1; u>= 0; --u) {
+			double z = b * fx / disparityLeft.at<uchar>(v,u) ;
+			double x = (u - cx) * z / fx * 0.001;
+			double y = (v - cy) * z / fy * 0.001;
+			if (x == INFINITY || y == INFINITY || z == INFINITY)
+				continue;
+			outFile << x << " " << y << " " << z << "\n";
+		}
+	}
+	outFile.close();
+
+
     Mat colorLeft;
     applyColorMap(disparityLeft, colorLeft, COLORMAP_JET);
-    medianBlur(colorLeft, colorLeft, 3);
+    medianBlur(colorLeft, colorLeft, 5);
+    medianBlur(disparityLeft, disparityLeft, 5);
+
+
+    auto end = std::chrono::system_clock::now();
+	std::chrono::duration<double> elapsed_sec = end - start;
+	std::cout << "\n----- DONE! -----" << std::endl;
+	std::cout << "Total used time: " << elapsed_sec.count() << "s." << std::endl;
+
     imshow("color Left", colorLeft);  
-    // imwrite("cost.jpg", disparityLeft);
+    imwrite("Cen.jpg", disparityLeft);
+    imwrite("Cen_c.jpg", colorLeft);
+
     waitKey(0);
 #endif
     
@@ -160,7 +211,7 @@ Mat funcSSDR2L(Mat leftImage, Mat rightImage, int windowSize, int dispMin, int d
 			}
 			dispMap.at<uchar>(i, j) = bestMatchSoFar;
 		}
-        cout << "Row: " << i << endl;
+        // cout << "Row: " << i << endl;
 	}
 	normalize(dispMap, dispMap, 0, 255, NORM_MINMAX);
 	return dispMap;
@@ -204,6 +255,53 @@ Mat funcNCCR2L(Mat leftImage, Mat rightImage, int windowSize, int dispMin, int d
 				if (prevNCC < ncc)
 				{
 					prevNCC = ncc;
+					bestMatchSoFar = dispRange;
+				}
+			}
+			dispMap.at<uchar>(i, j) = bestMatchSoFar;
+		}
+	}
+	normalize(dispMap, dispMap, 0, 255, NORM_MINMAX);
+	return dispMap;
+}
+
+Mat funcSADR2L(Mat leftImage, Mat rightImage, int windowSize, int dispMin, int dispMax, int STEP)
+{
+	CV_Assert(leftImage.rows == rightImage.rows && leftImage.cols == rightImage.cols);
+	CV_Assert(windowSize % 2 == 1);
+	CV_Assert(dispMax > dispMin);
+	int nrLeft = leftImage.rows - 1;
+	int ncLeft = leftImage.cols - 1;
+	int win = (windowSize - 1) / 2;
+	Mat dispMap = Mat::zeros(nrLeft, ncLeft, CV_8UC1);
+	for (int i = 0 + win; i <= nrLeft - win; i = i + STEP)
+	{
+		for (int j = 0 + win; j <= ncLeft - win - dispMax; j = j+STEP)
+		{
+			double prevSAD = 65532;
+			double temp = 0.0;
+			int bestMatchSoFar = dispMin;
+			for (int dispRange = dispMin; dispRange <= dispMax; dispRange++)
+			{
+				double sad = 0.0;
+				for (int a = -win; a <= win; a++)
+				{
+					for (int b = -win; b <= win; b++)
+					{
+						if (j + b + dispRange <= ncLeft)
+						{
+							temp = (double)rightImage.at<uchar>(i + a, j + b) - (double)leftImage.at<uchar>(i + a, j + b + dispRange);
+							if (temp < 0.0)
+							{
+								temp = temp*(-1.0);
+							}
+							sad = sad + temp;
+						}
+					}
+				}
+				if (prevSAD > sad)
+				{
+					prevSAD = sad;
 					bestMatchSoFar = dispRange;
 				}
 			}

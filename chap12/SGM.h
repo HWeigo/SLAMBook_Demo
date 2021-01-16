@@ -7,6 +7,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <chrono>
 #include <unordered_map> 
+#include <fstream>
 
 using namespace std;
 using namespace cv;
@@ -16,6 +17,7 @@ class SGM
 private:
     /* data */
     vector<uint16_t> _costLeft;
+    vector<double> _costDouble;
     vector<uint16_t> _costRight;
     vector<uint32_t> _censusLeft;
     vector<uint32_t> _censusRight;
@@ -52,7 +54,7 @@ public:
     void AggregationUpToDown(Mat src, int p1, int p2Init);
     void AggregationDownToUp(Mat src, int p1, int p2Init);
     Mat ConstructDisparityRight();
-    void LeftRightConsistency();
+    void LeftRightConsistency(int T);
     Mat FixInvalidPoint(Mat src);
 };
 
